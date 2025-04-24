@@ -13,7 +13,7 @@ const LogoIcon = ({ className, width, height }: Props) => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g clip-path="url(#clip0_150_1233)">
+      <g clipPath="url(#clip0_150_1233)">
         <path
           d="M30.0222 23.6646C30.0494 23.983 29.8009 24.2566 29.4846 24.2566H3.46924C3.15373 24.2566 2.90553 23.9843 2.93156 23.6665L4.7959 0.912269C4.8191 0.629618 5.05287 0.412109 5.33372 0.412109H27.5426C27.8226 0.412109 28.0561 0.628527 28.0801 0.910361L30.0222 23.6646Z"
           fill="#1DCF65"
@@ -40,8 +40,8 @@ const LogoIcon = ({ className, width, height }: Props) => {
           y2="4.9008"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#52D67A" />
-          <stop offset="1" stop-color="#5AEE87" />
+          <stop stopColor="#52D67A" />
+          <stop offset="1" stopColor="#5AEE87" />
         </linearGradient>
         <clipPath id="clip0_150_1233">
           <rect

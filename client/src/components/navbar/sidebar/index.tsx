@@ -1,11 +1,11 @@
 import { Dispatch, SetStateAction } from "react";
-import CloseMenuIcon from "../../assets/close-menu";
+import CloseMenuIcon from "../../icons/close-menu";
 
 type Props = {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 };
-const MobileNav = ({ open, setOpen }: Props) => {
+const Sidebar = ({ open, setOpen }: Props) => {
   return (
     <>
       <div
@@ -70,4 +70,4 @@ const MobileNav = ({ open, setOpen }: Props) => {
   );
 };
 
-export default MobileNav;
+export default Sidebar;

@@ -1,4 +1,4 @@
-import LogoIcon from "../../assets/logo";
+import LogoIcon from "../../icons/logo";
 
 const Logo = () => {
   return (
