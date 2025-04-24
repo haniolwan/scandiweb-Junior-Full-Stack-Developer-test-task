@@ -34,7 +34,7 @@ const CartPopup = () => {
             onClick={() => setOpen(!open)}
           >
             <div className="relative">
-              <CartIcon className="size-6 shrink-0 text-gray-400 group-hover:text-gray-500" />
+              <CartIcon className="text-cart size-6 shrink-0 group-hover:text-gray-500" />
               <span className="absolute -top-2 -right-2 inline-flex items-center justify-center rounded-full bg-gray-900 px-1.5 py-0.5 text-xs font-bold text-white">
                 {totalCartItems.length}
               </span>

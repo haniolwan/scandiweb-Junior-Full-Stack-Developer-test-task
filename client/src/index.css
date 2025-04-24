@@ -31,6 +31,8 @@
 @theme {
   --color-primary: #5ece7b;
   --color-dark: #1d1f22;
+  --color-cart: #43464e;
+  --shadow-product: 0px 4px 35px 0px rgba(168, 172, 176, 0.19);
 }
 
 @layer base {
