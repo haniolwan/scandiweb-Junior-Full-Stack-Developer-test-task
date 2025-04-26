@@ -12,6 +12,7 @@ const CartPopup = () => {
   useOutsideClick(cartMenuRef, () => setOpen(false));
   const { totalCartItems } = useTotalCartItems();
 
+  const cartLength = totalCartItems.length;
   return (
     <div className="ml-auto flex items-center">
       <div className="ml-4 flow-root lg:ml-6">
@@ -35,9 +36,11 @@ const CartPopup = () => {
           >
             <div className="relative">
               <CartIcon className="text-cart size-6 shrink-0 group-hover:text-gray-500" />
-              <span className="absolute -top-2 -right-2 inline-flex items-center justify-center rounded-full bg-gray-900 px-1.5 py-0.5 text-xs font-bold text-white">
-                {totalCartItems.length}
-              </span>
+              {cartLength > 0 && (
+                <span className="absolute -top-2 -right-2 inline-flex items-center justify-center rounded-full bg-gray-900 px-1.5 py-0.5 text-xs font-bold text-white">
+                  {cartLength}
+                </span>
+              )}
             </div>
             <span className="sr-only">items in cart, view bag</span>
           </button>
@@ -56,7 +59,11 @@ const CartPopup = () => {
                 <p className="text-md font-bold">
                   My Bag,&nbsp;
                   <span className="text-md font-medium">
-                    {totalCartItems.length} items
+                    {cartLength === 0
+                      ? "Your cart is empty"
+                      : cartLength
+                      ? "1 Item"
+                      : totalCartItems.length + " Items"}
                   </span>
                 </p>
 
