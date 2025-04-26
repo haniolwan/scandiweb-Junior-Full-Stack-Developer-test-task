@@ -1,9 +1,13 @@
 import { mockData } from "../../assets/dummyData/Data";
+import { useProductFilters } from "../../context/productFilters";
 import { Product } from "../../types";
 import Card from "./card";
 
 const Products = () => {
-  const products = mockData.data.products;
+  const { filter } = useProductFilters();
+  const products = mockData.data.products.filter(product =>
+    filter === "" || filter === "all" ? product : product.category === filter
+  ); // filter products by category stored in context
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">

@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { Product } from "../../../types";
 import { CartIcon } from "../../icons";
 
@@ -27,14 +28,12 @@ const Card = ({ product }: Props) => {
     price => price.currency.label === "USD" && "$" + price.amount
   )[0]; // get usd price
 
-  console.log(product);
   return (
     <a
-      className={`
-      relative group cursor-pointer
-      p-2 transition-transform duration-300
-      hover:scale-105 hover:shadow-[var(--shadow-product)]
-      ${product.inStock ? "" : "opacity-60"}`}
+      className={classNames(
+        "relative group cursor-pointer p-2 transition-transform duration-300 hover:scale-105 hover:shadow-[var(--shadow-product)]",
+        { "opacity-60": !product.inStock }
+      )}
     >
       <InStockOverlay />
       <img

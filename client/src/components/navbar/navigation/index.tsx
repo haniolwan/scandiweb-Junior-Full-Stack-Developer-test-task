@@ -1,15 +1,30 @@
-const Navigation = () => {
-  const navigation: string[] = ["Women", "Men", "Kids"];
+import classNames from "classnames";
+import { useProductFilters } from "../../../context/productFilters";
 
-  const Link = ({ name }: { name: string }) => {
+type Props = {
+  categories: string[];
+};
+const Navigation = ({ categories }: Props) => {
+  const Link = ({ category }: { category: string }) => {
+    const { filter, updatedFilters } = useProductFilters();
+
+    console.log(category);
     return (
-      <div className="cursor-pointer hover:border-b border-primary relative flex">
+      <div
+        className={classNames("hover:border-b border-primary relative flex", {
+          "border-b border-primary": filter === category,
+        })}
+      >
         <button
           type="button"
-          className="font-Raleway capitalize relative z-10 -mb-px flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-gray-700 transition-colors duration-200 ease-out hover:text-primary"
+          className={classNames(
+            "cursor-pointer capitalize relative z-10 -mb-px flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-gray-700 transition-colors duration-200 ease-out hover:text-primary",
+            { "text-primary ": filter === category }
+          )}
           aria-expanded="false"
+          onClick={() => updatedFilters(category)}
         >
-          {name}
+          {category}
         </button>
       </div>
     );
@@ -18,8 +33,8 @@ const Navigation = () => {
   return (
     <div className="hidden lg:ml-8 lg:block lg:self-stretch">
       <div className="flex h-full space-x-8">
-        {navigation.map(name => (
-          <Link key={name} name={name} />
+        {categories.map(category => (
+          <Link key={category} category={category} />
         ))}
       </div>
     </div>

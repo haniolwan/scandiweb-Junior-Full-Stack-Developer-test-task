@@ -3,6 +3,7 @@ import { CartIcon } from "../../../icons";
 import useOutsideClick from "../../../../hooks/useOutsideClick";
 import Item from "../item";
 import { useTotalCartItems } from "../../../../context/cartItems";
+import classNames from "classnames";
 
 const CartPopup = () => {
   const [open, setOpen] = useState(false);
@@ -18,16 +19,17 @@ const CartPopup = () => {
       <div className="ml-4 flow-root lg:ml-6">
         <div className="relative inline-block text-left">
           <div
-            className={`fixed inset-0 z-30 bg-black/25 transition-opacity duration-300 ease-in-out ${
-              open ? "opacity-100" : "opacity-0 pointer-events-none"
-            }`}
+            className={classNames(
+              "fixed inset-0 z-30 bg-black/25 transition-opacity duration-300 ease-in-out",
+              { "opacity-100": open, "opacity-0 pointer-events-none": !open }
+            )}
             aria-hidden="true"
           />
           <button
             type="button"
             className="group -m-2 flex items-center p-2 cursor-pointer"
             aria-haspopup="true"
-            aria-expanded={open ? "true" : "false"}
+            aria-expanded={open}
             aria-controls="cart-menu"
             aria-label="Shopping cart. 0 items. View bag"
             id="cart-menu-button"

@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import { MinusIcon, PlusIcon } from "../../../icons";
+import classNames from "classnames";
 
 const ToggleAddRemove = ({
   type,
@@ -45,13 +46,18 @@ const ToggleSize = ({
   return (
     <button
       type="button"
-      className={`ring-1 w-6 h-6 flex items-center justify-center cursor-pointer ${
-        isSelected ? "bg-dark text-white" : "hover:bg-gray-200"
-      }`}
+      className={classNames(
+        "ring-1 w-6 h-6 flex items-center justify-center cursor-pointer",
+        { "bg-dark text-white": isSelected, "hover:bg-gray-200": !isSelected }
+      )}
       onClick={() => setSelectedSize(size)}
-      aria-label={`Select size ${size}`}
+      aria-label={classNames("Select size ", { size })}
     >
-      <span className={`text-xs font-medium ${isSelected ? "font-bold" : ""}`}>
+      <span
+        className={classNames("text-xs font-medium", {
+          "font-bold": isSelected,
+        })}
+      >
         {size}
       </span>
     </button>
@@ -71,11 +77,13 @@ const ToggleColor = ({
   return (
     <button
       type="button"
-      className={`w-5 h-5 cursor-pointer ${
-        isSelected ? "ring-1 ring-primary" : "hover:ring-1"
-      }`}
+      className={classNames(
+        "w-5 h-5 cursor-pointer",
+        { "ring-1 ring-primary": isSelected },
+        { "hover:ring-1": !isSelected }
+      )}
       onClick={() => setSelectedColor(color)}
-      aria-label={`Select color ${color}`}
+      aria-label={classNames("Select color ", { color })}
       style={{ backgroundColor: color }}
     ></button>
   );

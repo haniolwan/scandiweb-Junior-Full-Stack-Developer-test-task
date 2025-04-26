@@ -11,6 +11,11 @@ export interface Product {
   __typename: string;
 }
 
+export type Category = {
+  name: string;
+  __typename: "Category";
+};
+
 interface AttributeSet {
   id: string;
   name: string;
