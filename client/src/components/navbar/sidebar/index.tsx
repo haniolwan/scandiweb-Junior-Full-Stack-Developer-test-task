@@ -1,7 +1,8 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useRef } from "react";
 import { CloseMenuIcon } from "../../icons";
 import { useProductFilters } from "../../../context/productFilters";
 import classNames from "classnames";
+import useOutsideClick from "../../../hooks/useOutsideClick";
 
 type Props = {
   categories: string[];
@@ -31,6 +32,10 @@ const Sidebar = ({ categories, open, setOpen }: Props) => {
 
   const { filter, updatedFilters } = useProductFilters();
 
+  const sidebarRef = useRef<HTMLDivElement | null>(null);
+
+  useOutsideClick(sidebarRef, () => setOpen(false));
+
   return (
     <>
       <div
@@ -42,6 +47,7 @@ const Sidebar = ({ categories, open, setOpen }: Props) => {
       />
       <span className="sr-only">mobile navbar view</span>
       <div
+        ref={sidebarRef}
         className={classNames(
           "fixed inset-y-0 left-0 z-40 w-64 bg-white transition-transform duration-300 ease-in-out transform lg:hidden",
           { "translate-x-0": open, "-translate-x-full": !open }
