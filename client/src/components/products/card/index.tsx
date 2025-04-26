@@ -31,7 +31,7 @@ const Card = ({ product }: Props) => {
   return (
     <a
       className={classNames(
-        "relative group cursor-pointer p-2 transition-transform duration-300 hover:scale-105 hover:shadow-[var(--shadow-product)]",
+        "w-80 md:w-full relative group cursor-pointer p-2 transition-transform duration-300 hover:scale-105 hover:shadow-[var(--shadow-product)]",
         { "opacity-60": !product.inStock }
       )}
     >
