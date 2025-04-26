@@ -1,4 +1,4 @@
-import Logo from "../navbar/logo";
+import Logo from "../layout/logo";
 import CartIcon from "./cart";
 import CloseMenuIcon from "./close-menu";
 import MinusIcon from "./minus";

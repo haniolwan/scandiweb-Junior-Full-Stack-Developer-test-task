@@ -66,6 +66,7 @@ const Sidebar = ({ categories, open, setOpen }: Props) => {
                 >
                   {categories.map(category => (
                     <button
+                      key={category}
                       className={classNames(
                         "hover:bg-gray-100 border border-gray-100 rounded-md px-1 py-2 text-base font-medium whitespace-nowrap text-gray-900",
                         { "text-primary": category === filter }

@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import { Product } from "../../../types";
 import { CartIcon } from "../../icons";
+import { Link } from "react-router";
 
 type Props = {
   product: Product;
@@ -29,7 +30,8 @@ const Card = ({ product }: Props) => {
   )[0]; // get usd price
 
   return (
-    <a
+    <Link
+      to={product.id}
       className={classNames(
         "w-80 md:w-full relative group cursor-pointer p-2 transition-transform duration-300 hover:scale-105 hover:shadow-[var(--shadow-product)]",
         { "opacity-60": !product.inStock }
@@ -43,7 +45,7 @@ const Card = ({ product }: Props) => {
       />
       <h3 className="mt-4 text-sm text-gray-700">{product.name}</h3>
       <p className="mt-1 text-lg font-medium text-gray-900">{usdPrice}</p>
-    </a>
+    </Link>
   );
 };
 

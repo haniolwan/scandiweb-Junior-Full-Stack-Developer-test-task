@@ -69,7 +69,7 @@ const CartPopup = () => {
                   </span>
                 </p>
 
-                {totalCartItems.length !== 0 && (
+                {totalCartItems.length === 0 && (
                   <div className="mt-8">
                     <div className="flow-root">
                       <ul role="list" className="-my-6">

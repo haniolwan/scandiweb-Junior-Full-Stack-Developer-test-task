@@ -24,7 +24,7 @@ interface AttributeSet {
   __typename: string;
 }
 
-interface Attribute {
+export interface Attribute {
   displayValue: string;
   value: string;
   id: string;

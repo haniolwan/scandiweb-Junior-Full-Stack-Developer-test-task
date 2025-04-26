@@ -8,7 +8,6 @@ const Navigation = ({ categories }: Props) => {
   const Link = ({ category }: { category: string }) => {
     const { filter, updatedFilters } = useProductFilters();
 
-    console.log(category);
     return (
       <div
         className={classNames("hover:border-b border-primary relative flex", {
