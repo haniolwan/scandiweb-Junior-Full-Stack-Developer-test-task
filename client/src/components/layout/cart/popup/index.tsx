@@ -4,6 +4,7 @@ import useOutsideClick from "../../../../hooks/useOutsideClick";
 import Item from "../item";
 import { useTotalCartItems } from "../../../../context/cartItems";
 import classNames from "classnames";
+import { v4 as uuid } from "uuid";
 
 const CartPopup = () => {
   const [open, setOpen] = useState(false);
@@ -11,9 +12,13 @@ const CartPopup = () => {
   const cartMenuRef = useRef<HTMLDivElement | null>(null);
 
   useOutsideClick(cartMenuRef, () => setOpen(false));
-  const { totalCartItems } = useTotalCartItems();
+  const { selectedCartItems } = useTotalCartItems();
 
-  const cartLength = totalCartItems.length;
+  const cartLength = selectedCartItems.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
+
   return (
     <div className="ml-auto flex items-center">
       <div className="ml-4 flow-root lg:ml-6">
@@ -65,16 +70,20 @@ const CartPopup = () => {
                       ? "Your cart is empty"
                       : cartLength
                       ? "1 Item"
-                      : totalCartItems.length + " Items"}
+                      : cartLength + " Items"}
                   </span>
                 </p>
 
-                {totalCartItems.length === 0 && (
+                {cartLength !== 0 && (
                   <div className="mt-8">
                     <div className="flow-root">
                       <ul role="list" className="-my-6">
-                        <Item />
-                        <Item />
+                        {selectedCartItems.map(
+                          item =>
+                            item.quantity > 0 && (
+                              <Item key={uuid()} cartItem={item} />
+                            )
+                        )}
                       </ul>
                     </div>
                   </div>

@@ -1,24 +1,28 @@
-import { Dispatch, SetStateAction } from "react";
 import { MinusIcon, PlusIcon } from "../../../icons";
 import classNames from "classnames";
 
 const ToggleAddRemove = ({
+  productId,
   type,
-  count,
-  setCount,
+  handleAddCartItem,
+  handleRemoveCartItem,
 }: {
+  productId: string;
   type: "add" | "remove";
-  count: number;
-  setCount: Dispatch<SetStateAction<number>>;
+  handleAddCartItem: (productId: string) => void;
+  handleRemoveCartItem: (productId: string) => void;
 }) => {
   // To do make sure to not exceed inventory
+
   return (
     <button
       type="button"
       className="hover:bg-gray-300 ring-1 w-6 h-6 flex items-center justify-center cursor-pointer"
       aria-label={type === "add" ? "Add item" : "Remove item"}
       onClick={() =>
-        type === "add" ? setCount(count + 1) : count > 1 && setCount(count - 1)
+        type === "add"
+          ? handleAddCartItem(productId)
+          : handleRemoveCartItem(productId)
       }
     >
       {type === "add" ? (
@@ -40,7 +44,7 @@ const ToggleSize = ({
   attrId: string;
   className?: string;
   size: string;
-  selectedSize: string;
+  selectedSize?: string;
   setSelectedSize: (Id: string, value: string) => void;
 }) => {
   const isSelected = size === selectedSize;

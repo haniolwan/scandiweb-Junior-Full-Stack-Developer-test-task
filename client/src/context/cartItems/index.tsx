@@ -1,9 +1,12 @@
 import React, { createContext, useState, useContext, ReactNode } from "react";
-import { Product } from "../../types";
+import { CartItem, Product } from "../../helpers/types";
 
 interface CartItemsContextType {
-  totalCartItems: Product[];
-  updateTotalCartItems: (products: Product[]) => void;
+  displayCartItems: Product[]; // this for display product with choosing different attributes
+  updateDisplayCartItems: (products: Product[]) => void;
+
+  selectedCartItems: CartItem[];
+  updateSelectedCartItems: (items: CartItem[]) => void; // change to new shape for api request
 }
 
 const TotalItemsContext = createContext<CartItemsContextType | undefined>(
@@ -17,15 +20,25 @@ interface TotalItemsProviderProps {
 export const TotalItemsProvider: React.FC<TotalItemsProviderProps> = ({
   children,
 }) => {
-  const [totalCartItems, setTotalCartItems] = useState<Product[]>([]);
+  const [displayCartItems, setDisplayCartItems] = useState<Product[]>([]);
+  const [selectedCartItems, setSelectedCartItems] = useState<CartItem[]>([]);
 
-  const updateTotalCartItems = (items: Product[]) => {
-    setTotalCartItems(items);
+  const updateDisplayCartItems = (items: Product[]) => {
+    setDisplayCartItems(items);
+  };
+
+  const updateSelectedCartItems = (items: CartItem[]) => {
+    setSelectedCartItems(items);
   };
 
   return (
     <TotalItemsContext.Provider
-      value={{ totalCartItems, updateTotalCartItems }}
+      value={{
+        displayCartItems,
+        updateDisplayCartItems,
+        selectedCartItems,
+        updateSelectedCartItems,
+      }}
     >
       {children}
     </TotalItemsContext.Provider>

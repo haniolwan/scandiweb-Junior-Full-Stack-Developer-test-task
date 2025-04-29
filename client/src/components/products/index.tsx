@@ -1,7 +1,7 @@
 import { mockData } from "../../assets/dummyData/Data";
 import { useProductFilters } from "../../context/productFilters";
 import Layout from "../../pages/layout";
-import { Product } from "../../types";
+import { Product } from "../../helpers/types";
 import Card from "./card";
 
 const Products = () => {

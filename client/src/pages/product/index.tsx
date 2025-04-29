@@ -3,7 +3,7 @@ import Info from "../../components/product/info";
 import ThumbsGallery from "../../components/product/thumbs";
 import Layout from "../layout";
 import { mockData } from "../../assets/dummyData/Data";
-import { Product as ProductType } from "../../types";
+import { Product as ProductType } from "../../helpers/types";
 
 const Product = () => {
   const { id } = useParams();
@@ -11,7 +11,7 @@ const Product = () => {
     product => product.id === id
   );
   return (
-    <Layout>
+    <Layout className="flex-col lg:flex-row">
       <ThumbsGallery gallery={product!.gallery} />
       <Info product={product!} />
     </Layout>

@@ -1,16 +1,14 @@
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 import Sidebar from "./sidebar";
 import Navigation from "./navigation";
 import CartPopup from "./cart/popup";
 import { Logo } from "../icons";
 import { OpenMenuButton } from "./buttons";
 import { mockData } from "../../assets/dummyData/Data";
-import { Category } from "../../types";
+import { Category } from "../../helpers/types";
+import { Outlet } from "react-router";
 
-type Props = {
-  children: ReactNode;
-};
-const Layout = ({ children }: Props) => {
+const Layout = () => {
   const [open, setOpen] = useState(false);
   const categories = (mockData.data.categories as Category[]).map(
     category => category.name
@@ -29,7 +27,7 @@ const Layout = ({ children }: Props) => {
             <Logo />
             <CartPopup />
           </div>
-          {children}
+          <Outlet />
         </nav>
       </div>
     </>

@@ -1,15 +1,7 @@
-import { BrowserRouter as Router, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import LogoIcon from "../../icons/logo";
 
 const Logo = () => {
-  return (
-    <Router>
-      <MyComponent />
-    </Router>
-  );
-};
-
-const MyComponent = () => {
   const navigate = useNavigate();
 
   return (

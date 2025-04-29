@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { Product } from "../../../types";
+import { Product } from "../../../helpers/types";
 import { CartIcon } from "../../icons";
 import { Link } from "react-router";
 

@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { ToggleColor, ToggleSize } from "../../layout/cart/buttons";
-import { Attribute, Product } from "../../../types";
+import { Attribute, Product } from "../../../helpers/types";
 import classNames from "classnames";
 import DOMPurify from "dompurify";
+import { useTotalCartItems } from "../../../context/cartItems";
 
 type Props = {
   product: Product;
 };
 const Info = ({ product }: Props) => {
-  const [selection, setSelection] = useState(() => {
+  const [selectedAttributes, setSelectedAttributes] = useState(() => {
     return product.attributes.reduce((acc, attr) => {
-      acc["selected" + attr.id] = attr.items[0]?.value || "";
+      acc[attr.id] = attr.items[0]?.value || "";
       return acc;
     }, {} as Record<string, string>);
   });
@@ -23,10 +24,63 @@ const Info = ({ product }: Props) => {
     [];
 
   const handleItemSelect = (Id: string, value: string) => {
-    setSelection(prev => ({
+    setSelectedAttributes(prev => ({
       ...prev,
-      [`selected${Id}`]: value,
+      [Id]: value,
     }));
+  };
+
+  const {
+    displayCartItems,
+    updateDisplayCartItems,
+    selectedCartItems,
+    updateSelectedCartItems,
+  } = useTotalCartItems();
+
+  const handleAddItemToCart = () => {
+    // Update displayCartItems only once if not already present
+    const isInDisplayCart = displayCartItems.some(
+      item => item.id === product.id
+    );
+
+    if (!isInDisplayCart) {
+      updateDisplayCartItems([...displayCartItems, product]);
+    }
+
+    // Handle selectedCartItems
+    const updatedItems = selectedCartItems.map(item => {
+      const isSameProduct = item.productId === product.id;
+      const isSameAttributes =
+        JSON.stringify(item.selectedAttributes) ===
+        JSON.stringify(selectedAttributes);
+
+      if (isSameProduct && isSameAttributes) {
+        return {
+          ...item,
+          quantity: item.quantity + 1,
+        };
+      }
+
+      return item;
+    });
+
+    // Check if the item already exists in updatedItems
+    const itemExists = updatedItems.some(
+      item =>
+        item.productId === product.id &&
+        JSON.stringify(item.selectedAttributes) ===
+          JSON.stringify(selectedAttributes)
+    );
+
+    if (!itemExists) {
+      updatedItems.push({
+        productId: product.id,
+        selectedAttributes,
+        quantity: 1,
+      });
+    }
+
+    updateSelectedCartItems(updatedItems);
   };
 
   return (
@@ -52,7 +106,7 @@ const Info = ({ product }: Props) => {
                             attrId={attr.id}
                             key={size.id}
                             size={size.value}
-                            selectedSize={selection[`selected${attr.id}`]}
+                            selectedSize={selectedAttributes[attr.id]}
                             setSelectedSize={handleItemSelect}
                           />
                         ))}
@@ -74,7 +128,7 @@ const Info = ({ product }: Props) => {
                             attrId={attr.id}
                             key={color.id}
                             color={color.value}
-                            selectedColor={selection[`selected${attr.id}`]}
+                            selectedColor={selectedAttributes[attr.id]}
                             setSelectedColor={handleItemSelect}
                           />
                         ))}
@@ -91,17 +145,16 @@ const Info = ({ product }: Props) => {
                     </div>
 
                     <fieldset aria-label="Choose a size" className="mt-2">
-                      <div className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4">
+                      <div className="flex gap-2">
                         {attr.items.map(item => (
                           <label
                             key={item.id}
                             className={classNames(
                               {
                                 "!bg-gray-900 !text-white":
-                                  selection[`selected${attr.id}`] ===
-                                  item.value,
+                                  selectedAttributes[attr.id] === item.value,
                               },
-                              "hover:text-gray-900 group relative flex cursor-pointer items-center justify-center rounded-md border bg-white px-4 py-3 text-sm font-medium text-gray-900 uppercase shadow-xs hover:bg-gray-300 focus:outline-hidden sm:flex-1 sm:py-6"
+                              "w-16 h-14 hover:text-gray-900 group relative flex cursor-pointer items-center justify-center rounded-md border bg-white text-sm font-medium text-gray-900 uppercase shadow-xs hover:bg-gray-300 focus:outline-hidden sm:flex-1"
                             )}
                             onClick={() =>
                               handleItemSelect(attr.id, item.value)
@@ -138,6 +191,7 @@ const Info = ({ product }: Props) => {
           <button
             type="button"
             className="cursor-pointer hover:scale-105 transition uppercase mt-10 flex w-full items-center justify-center border border-transparent bg-primary px-8 py-3 text-base font-medium text-white focus:outline-hidden"
+            onClick={handleAddItemToCart}
           >
             Add to cart
           </button>

@@ -1,8 +1,8 @@
 import { useRef } from "react";
 import { Swiper, SwiperSlide, SwiperRef } from "swiper/react";
 import { Navigation, Thumbs } from "swiper/modules";
+import { Product } from "../../../helpers/types";
 import "./style.css";
-import { Product } from "../../../types";
 type Props = {
   gallery: Product["gallery"];
 };
@@ -20,7 +20,6 @@ const ThumbsGallery = ({ gallery }: Props) => {
       <div className="w-[100px] h-[400px]">
         <Swiper
           direction="vertical"
-          loop={true}
           slidesPerView={5}
           spaceBetween={10}
           className="h-full"

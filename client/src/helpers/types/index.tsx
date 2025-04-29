@@ -11,6 +11,15 @@ export interface Product {
   __typename: string;
 }
 
+export interface CartItem {
+  productId: string;
+  selectedAttributes: {
+    // same id different attributes
+    [attributeName: string]: string;
+  };
+  quantity: number;
+}
+
 export type Category = {
   name: string;
   __typename: "Category";
