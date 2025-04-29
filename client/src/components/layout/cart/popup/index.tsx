@@ -19,6 +19,8 @@ const CartPopup = () => {
     0
   );
 
+  const handlePlaceOrder = () => {};
+
   return (
     <div className="ml-auto flex items-center">
       <div className="ml-4 flow-root lg:ml-6">
@@ -68,7 +70,7 @@ const CartPopup = () => {
                   <span className="text-md font-medium">
                     {cartLength === 0
                       ? "Your cart is empty"
-                      : cartLength
+                      : cartLength === 1
                       ? "1 Item"
                       : cartLength + " Items"}
                   </span>
@@ -88,6 +90,17 @@ const CartPopup = () => {
                     </div>
                   </div>
                 )}
+                <div className="flex justify-between my-5">
+                  <h3 className="text-md font-bold">Total</h3>
+                  <p className="text-md font-bold">$200.00</p>
+                </div>
+                <button
+                  type="button"
+                  className="cursor-pointer hover:scale-105 transition uppercase mt-6 flex w-full items-center justify-center border border-transparent bg-primary px-8 py-3 text-base font-medium text-white focus:outline-hidden"
+                  onClick={handlePlaceOrder}
+                >
+                  PLACE ORDER
+                </button>
               </div>
             </div>
           )}

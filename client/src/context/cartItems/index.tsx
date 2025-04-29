@@ -20,15 +20,33 @@ interface TotalItemsProviderProps {
 export const TotalItemsProvider: React.FC<TotalItemsProviderProps> = ({
   children,
 }) => {
-  const [displayCartItems, setDisplayCartItems] = useState<Product[]>([]);
-  const [selectedCartItems, setSelectedCartItems] = useState<CartItem[]>([]);
+  const [displayCartItems, setDisplayCartItems] = useState<Product[]>(() => {
+    try {
+      const storedItems = localStorage.getItem("cart_display_items");
+      return storedItems ? JSON.parse(storedItems) : [];
+    } catch (error) {
+      console.error("Failed to load cart from localStorage", error);
+      return [];
+    }
+  });
+  const [selectedCartItems, setSelectedCartItems] = useState<CartItem[]>(() => {
+    try {
+      const storedItems = localStorage.getItem("cart_items");
+      return storedItems ? JSON.parse(storedItems) : [];
+    } catch (error) {
+      console.error("Failed to load cart from localStorage", error);
+      return [];
+    }
+  });
 
   const updateDisplayCartItems = (items: Product[]) => {
     setDisplayCartItems(items);
+    window.localStorage.setItem("cart_display_items", JSON.stringify(items));
   };
 
   const updateSelectedCartItems = (items: CartItem[]) => {
     setSelectedCartItems(items);
+    window.localStorage.setItem("cart_items", JSON.stringify(items));
   };
 
   return (

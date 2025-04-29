@@ -90,8 +90,8 @@ const ToggleColor = ({
       type="button"
       className={classNames(
         className,
-        "w-5 h-5 cursor-pointer",
-        { "ring-1 ring-primary": isSelected },
+        "ring-1 ring-gray-400 w-5 h-5 cursor-pointer",
+        { " ring-primary": isSelected },
         { "hover:ring-1": !isSelected }
       )}
       onClick={() => setSelectedColor(attrId, color)}

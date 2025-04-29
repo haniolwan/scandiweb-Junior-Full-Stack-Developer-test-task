@@ -15,37 +15,12 @@ const Item = ({ cartItem }: Props) => {
     product => product.id === cartItem.productId
   );
 
-  // const [selection, setSelection] = useState(() => {
-  //   return matchingProduct?.attributes.reduce((acc, attr) => {
-  //     acc[attr.id] = attr.items[0]?.value || "";
-  //     return acc;
-  //   }, {} as Record<string, string>);
-  // });
-
   const sizes =
     matchingProduct?.attributes.find(attr => attr.id === "Size" && attr.items)
       ?.items || [];
   const colors =
     matchingProduct?.attributes.find(attr => attr.id === "Color" && attr.items)
       ?.items || [];
-
-  const handleAttributeChange = (Id: string, value: string) => {
-    const updatedCartItems = selectedCartItems.map(item => {
-      const itemFound =
-        item.productId === cartItem.productId &&
-        JSON.stringify(item.selectedAttributes) ===
-          JSON.stringify(cartItem.selectedAttributes); // get item by id and attributes
-      if (itemFound) {
-        return {
-          ...cartItem,
-          selectedAttributes: { ...cartItem.selectedAttributes, [Id]: value },
-        };
-      }
-      return cartItem;
-    });
-
-    updateSelectedCartItems(updatedCartItems);
-  };
 
   const handleAddCartItem = () => {
     const updatedCartItems = selectedCartItems.map(item => {
@@ -83,7 +58,39 @@ const Item = ({ cartItem }: Props) => {
     updateSelectedCartItems(updatedCartItems);
   };
 
-  // console.log(selection);
+  const handleAttributeChange = (Id: string, value: string) => {
+    const updatedCartItems = selectedCartItems.flatMap(item => {
+      const isSameItem =
+        item.productId === cartItem.productId &&
+        JSON.stringify(item.selectedAttributes) ===
+          JSON.stringify(cartItem.selectedAttributes);
+
+      if (isSameItem) {
+        const newAttributes = { ...item.selectedAttributes, [Id]: value };
+
+        const exists = selectedCartItems.some(
+          other =>
+            other.productId === item.productId &&
+            JSON.stringify(other.selectedAttributes) ===
+              JSON.stringify(newAttributes)
+        );
+
+        if (exists) {
+          return item;
+        }
+
+        return {
+          ...item,
+          selectedAttributes: newAttributes,
+        };
+      }
+
+      return item;
+    });
+
+    updateSelectedCartItems(updatedCartItems);
+  };
+
   return (
     matchingProduct && (
       <li className="flex space-x-4 py-6">
