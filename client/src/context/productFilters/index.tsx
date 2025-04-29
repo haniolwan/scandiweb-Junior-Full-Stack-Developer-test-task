@@ -16,10 +16,19 @@ interface FilterProductsProviderProps {
 export const FilterProductsProvider: React.FC<FilterProductsProviderProps> = ({
   children,
 }) => {
-  const [filter, setFilter] = useState<string>("all");
+  const [filter, setFilter] = useState<string>(() => {
+    try {
+      const storedItems = localStorage.getItem("product_filters");
+      return storedItems ? JSON.parse(storedItems) : "all";
+    } catch (error) {
+      console.error("Failed to load cart from localStorage", error);
+      return "all";
+    }
+  });
 
   const updatedFilters = (category: string) => {
     setFilter(category);
+    window.localStorage.setItem("product_filters", JSON.stringify(category));
   };
 
   return (
