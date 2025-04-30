@@ -2,8 +2,8 @@ import { useState } from "react";
 import { ToggleColor, ToggleSize } from "../../layout/cart/buttons";
 import { Attribute, Product } from "../../../helpers/types";
 import classNames from "classnames";
-import DOMPurify from "dompurify";
 import { useTotalCartItems } from "../../../context/cartItems";
+import parse from "html-react-parser";
 
 type Props = {
   product: Product;
@@ -11,7 +11,7 @@ type Props = {
 const Info = ({ product }: Props) => {
   const [selectedAttributes, setSelectedAttributes] = useState(() => {
     return product.attributes.reduce((acc, attr) => {
-      acc[attr.id] = attr.items[0]?.value || "";
+      acc[attr.id] = "";
       return acc;
     }, {} as Record<string, string>);
   });
@@ -38,7 +38,6 @@ const Info = ({ product }: Props) => {
   } = useTotalCartItems();
 
   const handleAddItemToCart = () => {
-    // Update displayCartItems only once if not already present
     const isInDisplayCart = displayCartItems.some(
       item => item.id === product.id
     );
@@ -47,7 +46,6 @@ const Info = ({ product }: Props) => {
       updateDisplayCartItems([...displayCartItems, product]);
     }
 
-    // Handle selectedCartItems
     const updatedItems = selectedCartItems.map(item => {
       const isSameProduct = item.productId === product.id;
       const isSameAttributes =
@@ -64,7 +62,6 @@ const Info = ({ product }: Props) => {
       return item;
     });
 
-    // Check if the item already exists in updatedItems
     const itemExists = updatedItems.some(
       item =>
         item.productId === product.id &&
@@ -77,12 +74,23 @@ const Info = ({ product }: Props) => {
         productId: product.id,
         selectedAttributes,
         quantity: 1,
+        price: product.prices[0].amount,
       });
     }
 
     updateSelectedCartItems(updatedItems);
   };
 
+  const isOutOfStock =
+    new URLSearchParams(location.search).get("status") === "out-of-stock";
+
+  const isDisabled = !Object.values(selectedAttributes).every(Boolean); // disable add to cart button when there's no options
+
+  const toKebabCase = (str: string) =>
+    str
+      .replace(/([a-z])([A-Z])/g, "$1-$2")
+      .replace(/\s+/g, "-")
+      .toLowerCase();
   return (
     <div>
       <div>
@@ -98,7 +106,10 @@ const Info = ({ product }: Props) => {
                     <h3 className="text-md pb-2 pt-4 font-bold uppercase">
                       {attr.id}:
                     </h3>
-                    <ul className="flex gap-2">
+                    <ul
+                      className="flex gap-2"
+                      data-testid={`product-attribute-${toKebabCase(attr.id)}`}
+                    >
                       {sizes &&
                         sizes.map((size: Attribute) => (
                           <ToggleSize
@@ -108,6 +119,7 @@ const Info = ({ product }: Props) => {
                             size={size.value}
                             selectedSize={selectedAttributes[attr.id]}
                             setSelectedSize={handleItemSelect}
+                            // dataSet={}
                           />
                         ))}
                     </ul>
@@ -188,25 +200,29 @@ const Info = ({ product }: Props) => {
               {product.prices[0].currency.symbol + product.prices[0].amount}
             </p>
           </div>
-          <button
-            type="button"
-            className="cursor-pointer hover:scale-105 transition uppercase mt-10 flex w-full items-center justify-center border border-transparent bg-primary px-8 py-3 text-base font-medium text-white focus:outline-hidden"
-            onClick={handleAddItemToCart}
-          >
-            Add to cart
-          </button>
+          {!isOutOfStock && product.inStock && (
+            <button
+              disabled={isDisabled}
+              type="button"
+              className="disabled:opacity-40 disabled:pointer-events-none cursor-pointer hover:scale-105 transition uppercase mt-10 flex w-full items-center justify-center border border-transparent bg-primary px-8 py-3 text-base font-medium text-white focus:outline-hidden"
+              onClick={handleAddItemToCart}
+              data-testid="add-to-cart"
+            >
+              Add to cart
+            </button>
+          )}
         </div>
       </div>
 
       <div className="mt-10">
         <h3 className="sr-only">Description</h3>
         <div className="space-y-6">
-          <div
+          <span
             className="text-base text-gray-900"
-            dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(product.description),
-            }}
-          />
+            data-testid="product-description"
+          >
+            {parse(product.description)}
+          </span>
         </div>
       </div>
     </div>

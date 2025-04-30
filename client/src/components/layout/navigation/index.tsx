@@ -8,20 +8,22 @@ const Navigation = ({ categories }: Props) => {
   const Link = ({ category }: { category: string }) => {
     const { filter, updatedFilters } = useProductFilters();
 
+    const isActive = filter === category;
     return (
       <div
         className={classNames("hover:border-b border-primary relative flex", {
-          "border-b border-primary": filter === category,
+          "border-b border-primary": isActive,
         })}
       >
         <button
           type="button"
           className={classNames(
             "cursor-pointer capitalize relative z-10 -mb-px flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-gray-700 transition-colors duration-200 ease-out hover:text-primary",
-            { "text-primary ": filter === category }
+            { "text-primary ": isActive }
           )}
           aria-expanded="false"
           onClick={() => updatedFilters(category)}
+          data-testid={isActive ? "active-category-link" : "category-link"}
         >
           {category}
         </button>

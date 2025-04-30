@@ -2,50 +2,115 @@ import classNames from "classnames";
 import { Product } from "../../../helpers/types";
 import { CartIcon } from "../../icons";
 import { Link } from "react-router";
+import { useTotalCartItems } from "../../../context/cartItems";
 
 type Props = {
   product: Product;
 };
 
 const Card = ({ product }: Props) => {
-  const InStockOverlay = () => {
-    return (
-      <>
-        {product.inStock && (
-          <div className="hover:scale-105 opacity-0 group-hover:opacity-100 absolute bottom-14 right-6 bg-green-500 text-white p-2 rounded-full shadow-md z-10 transition-opacity duration-300">
-            <CartIcon className="text-white" width="20" height="20" />
-          </div>
-        )}
+  const usdPrice = product.prices.map(
+    price => price.currency.label === "USD" && "$" + price.amount.toFixed(2)
+  )[0]; // get usd price
+
+  const {
+    displayCartItems,
+    selectedCartItems,
+    updateDisplayCartItems,
+    updateSelectedCartItems,
+  } = useTotalCartItems();
+
+  const handleAddItemToCart = () => {
+    const isInDisplayCart = displayCartItems.some(
+      item => item.id === product.id
+    );
+
+    if (!isInDisplayCart) {
+      updateDisplayCartItems([...displayCartItems, product]);
+    }
+
+    const selectedAttributes = product.attributes.reduce((acc, attr) => {
+      acc[attr.id] = attr.items[0]?.value || "";
+      return acc;
+    }, {} as Record<string, string>);
+
+    const updatedItems = selectedCartItems.map(item => {
+      const isSameProduct = item.productId === product.id;
+
+      const isSameAttributes =
+        JSON.stringify(item.selectedAttributes) ===
+        JSON.stringify(selectedAttributes);
+
+      if (isSameProduct && isSameAttributes) {
+        return {
+          ...item,
+          quantity: item.quantity + 1,
+        };
+      }
+
+      return item;
+    });
+
+    const itemExists = updatedItems.some(
+      item =>
+        item.productId === product.id &&
+        JSON.stringify(item.selectedAttributes) ===
+          JSON.stringify(selectedAttributes)
+    );
+
+    if (!itemExists) {
+      updatedItems.push({
+        productId: product.id,
+        selectedAttributes,
+        quantity: 1,
+        price: product.prices[0].amount,
+      });
+    }
+
+    updateSelectedCartItems(updatedItems);
+  };
+
+  const toKebabCase = (str: string) =>
+    str
+      .replace(/([a-z])([A-Z])/g, "$1-$2")
+      .replace(/\s+/g, "-")
+      .toLowerCase();
+
+  return (
+    <div
+      className={classNames(
+        "w-80 md:w-full relative group cursor-pointer p-2 transition-transform duration-300 hover:scale-105 hover:shadow-[var(--shadow-product)]",
+        { "opacity-60": !product.inStock }
+      )}
+      data-testid={`product-${toKebabCase(product.id)}`}
+    >
+      {product.inStock && (
+        <button
+          onClick={handleAddItemToCart}
+          className="cursor-pointer hover:scale-105 opacity-0 group-hover:opacity-100 absolute bottom-14 right-6 bg-green-500 text-white p-2 rounded-full shadow-md z-10 transition-opacity duration-300"
+        >
+          <CartIcon className="text-white" width="20" height="20" />
+        </button>
+      )}
+      <Link
+        className="z-20"
+        to={!product.inStock ? `${product.id}?status=out-of-stock` : product.id}
+      >
         {!product.inStock && (
           <div className="absolute inset-0 z-10 flex items-center justify-center">
             <span className="text-2xl text-gray-700">Out of stock</span>
           </div>
         )}
-      </>
-    );
-  };
+        <img
+          src={product.gallery[0]}
+          alt="product cover"
+          className="aspect-square w-full object-contain xl:aspect-7/8"
+        />
 
-  const usdPrice = product.prices.map(
-    price => price.currency.label === "USD" && "$" + price.amount
-  )[0]; // get usd price
-
-  return (
-    <Link
-      to={product.id}
-      className={classNames(
-        "w-80 md:w-full relative group cursor-pointer p-2 transition-transform duration-300 hover:scale-105 hover:shadow-[var(--shadow-product)]",
-        { "opacity-60": !product.inStock }
-      )}
-    >
-      <InStockOverlay />
-      <img
-        src={product.gallery[0]}
-        alt="Tall slender porcelain bottle with natural clay textured body and cork stopper."
-        className="aspect-square w-full bg-gray-200 object-cover xl:aspect-7/8"
-      />
-      <h3 className="mt-4 text-sm text-gray-700">{product.name}</h3>
-      <p className="mt-1 text-lg font-medium text-gray-900">{usdPrice}</p>
-    </Link>
+        <h3 className="mt-4 text-sm text-gray-700">{product.name}</h3>
+        <p className="mt-1 text-lg font-medium text-gray-900">{usdPrice}</p>
+      </Link>
+    </div>
   );
 };
 

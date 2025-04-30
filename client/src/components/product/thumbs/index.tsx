@@ -36,7 +36,7 @@ const ThumbsGallery = ({ gallery }: Props) => {
           ))}
         </Swiper>
       </div>
-      <div className="w-[478px] h-[394px]">
+      <div className="w-[478px] max-h-[394px] overflow-y-auto">
         <Swiper
           ref={swiperRef}
           modules={[Navigation, Thumbs]}
@@ -51,8 +51,12 @@ const ThumbsGallery = ({ gallery }: Props) => {
           className="thumbShow w-full h-full"
         >
           {gallery.map((img, index) => (
-            <SwiperSlide key={index}>
-              <img src={img} alt="" className="w-full h-full object-cover" />
+            <SwiperSlide key={index} data-testid="product-gallery">
+              <img
+                src={img}
+                alt=""
+                className="w-full max-h-[394px] h-full object-contain"
+              />
             </SwiperSlide>
           ))}
         </Swiper>

@@ -24,6 +24,11 @@ const ToggleAddRemove = ({
           ? handleAddCartItem(productId)
           : handleRemoveCartItem(productId)
       }
+      data-testid={
+        type === "add"
+          ? "cart-item-amount-increase"
+          : "cart-item-amount-decrease"
+      }
     >
       {type === "add" ? (
         <PlusIcon width="16" height="16" />
@@ -40,12 +45,14 @@ const ToggleSize = ({
   size,
   selectedSize,
   setSelectedSize,
+  dataSet,
 }: {
   attrId: string;
   className?: string;
   size: string;
   selectedSize?: string;
   setSelectedSize: (Id: string, value: string) => void;
+  dataSet?: string;
 }) => {
   const isSelected = size === selectedSize;
 
@@ -59,6 +66,7 @@ const ToggleSize = ({
       )}
       onClick={() => setSelectedSize(attrId, size)}
       aria-label={classNames("Select size ", { size })}
+      data-testid={dataSet}
     >
       <span
         className={classNames("text-xs font-medium", {
@@ -77,26 +85,30 @@ const ToggleColor = ({
   color,
   selectedColor,
   setSelectedColor,
+  dataSet,
 }: {
   className?: string;
   attrId: string;
   color: string;
   selectedColor?: string;
   setSelectedColor: (Id: string, value: string) => void;
+  dataSet?: string;
 }) => {
   const isSelected = color === selectedColor;
+
   return (
     <button
       type="button"
       className={classNames(
         className,
         "ring-1 ring-gray-400 w-5 h-5 cursor-pointer",
-        { " ring-primary": isSelected },
+        { "ring-2 ring-primary": isSelected },
         { "hover:ring-1": !isSelected }
       )}
       onClick={() => setSelectedColor(attrId, color)}
       aria-label={classNames("Select color ", { color })}
       style={{ backgroundColor: color }}
+      data-testid={dataSet}
     ></button>
   );
 };

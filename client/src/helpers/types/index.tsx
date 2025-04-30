@@ -18,6 +18,7 @@ export interface CartItem {
     [attributeName: string]: string;
   };
   quantity: number;
+  price: number;
 }
 
 export type Category = {

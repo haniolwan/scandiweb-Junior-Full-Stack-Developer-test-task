@@ -91,6 +91,12 @@ const Item = ({ cartItem }: Props) => {
     updateSelectedCartItems(updatedCartItems);
   };
 
+  const toKebabCase = (str: string) =>
+    str
+      .replace(/([a-z])([A-Z])/g, "$1-$2")
+      .replace(/\s+/g, "-")
+      .toLowerCase();
+
   return (
     matchingProduct && (
       <li className="flex space-x-4 py-6">
@@ -100,11 +106,12 @@ const Item = ({ cartItem }: Props) => {
             {matchingProduct.prices[0].currency.symbol +
               matchingProduct.prices[0].amount}
           </p>
-          <div>
+          {/* disable options  */}
+          <div className="pointer-events-none">
             {matchingProduct.attributes.map(attr => {
               if (attr.id === "Size") {
                 return (
-                  <div key={attr.id}>
+                  <div key={attr.id} data-testid="cart-item-attribute-size">
                     <p className="py-2">{attr.id}:</p>
                     <ul className="flex gap-2">
                       {sizes.map(size => (
@@ -114,6 +121,13 @@ const Item = ({ cartItem }: Props) => {
                           size={size.value}
                           selectedSize={cartItem.selectedAttributes[attr.id]}
                           setSelectedSize={handleAttributeChange}
+                          dataSet={`cart-item-attribute-${toKebabCase(
+                            attr.id
+                          )}-${toKebabCase(size.value)}${
+                            size.value === cartItem.selectedAttributes[attr.id]
+                              ? "-selected"
+                              : ""
+                          }`}
                         />
                       ))}
                     </ul>
@@ -123,7 +137,7 @@ const Item = ({ cartItem }: Props) => {
 
               if (attr.id === "Color") {
                 return (
-                  <div key={attr.id}>
+                  <div key={attr.id} data-testid="cart-item-attribute-color">
                     <p className="py-2">{attr.id}:</p>
                     <ul className="flex gap-2">
                       {colors.map(color => (
@@ -133,6 +147,13 @@ const Item = ({ cartItem }: Props) => {
                           color={color.value}
                           selectedColor={cartItem.selectedAttributes[attr.id]}
                           setSelectedColor={handleAttributeChange}
+                          dataSet={`cart-item-attribute-${toKebabCase(
+                            attr.id
+                          )}-${color}${
+                            color.value === cartItem.selectedAttributes[attr.id]
+                              ? "-selected"
+                              : ""
+                          }`}
                         />
                       ))}
                     </ul>
@@ -140,7 +161,12 @@ const Item = ({ cartItem }: Props) => {
                 );
               } else {
                 return (
-                  <div key={attr.id}>
+                  <div
+                    key={attr.id}
+                    data-testid={`cart-item-attribute-${attr.id
+                      .replace(/\s+/g, "-")
+                      .toLowerCase()}`}
+                  >
                     <div className="flex items-center justify-between">
                       <h3 className="text-md pb-2 pt-4 font-bold uppercase">
                         {attr.id}:
@@ -193,7 +219,7 @@ const Item = ({ cartItem }: Props) => {
               handleAddCartItem={handleAddCartItem}
               handleRemoveCartItem={handleRemoveCartItem}
             />
-            <p>{cartItem.quantity}</p>
+            <p data-testid="cart-item-amount">{cartItem.quantity}</p>
             <ToggleAddRemove
               productId={cartItem.productId}
               type="remove"
