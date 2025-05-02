@@ -1,8 +1,9 @@
 import { Dispatch, SetStateAction, useRef } from "react";
 import { CloseMenuIcon } from "../../icons";
-import { useProductFilters } from "../../../context/productFilters";
+// import { useProductFilters } from "../../../context/productFilters";
 import classNames from "classnames";
 import useOutsideClick from "../../../hooks/useOutsideClick";
+import { CategoryNav } from "../navigation";
 
 type Props = {
   categories: string[];
@@ -30,7 +31,7 @@ const Sidebar = ({ categories, open, setOpen }: Props) => {
     );
   };
 
-  const { filter, updatedFilters } = useProductFilters();
+  // const { filter, updatedFilters } = useProductFilters();
 
   const sidebarRef = useRef<HTMLDivElement | null>(null);
 
@@ -65,17 +66,18 @@ const Sidebar = ({ categories, open, setOpen }: Props) => {
                   aria-orientation="vertical"
                 >
                   {categories.map(category => (
-                    <button
-                      key={category}
-                      className={classNames(
-                        "hover:bg-gray-100 border border-gray-100 rounded-md px-1 py-2 text-base font-medium whitespace-nowrap text-gray-900",
-                        { "text-primary": category === filter }
-                      )}
-                      type="button"
-                      onClick={() => updatedFilters(category)}
-                    >
-                      {category}
-                    </button>
+                    <CategoryNav key={category} category={category} />
+                    // <button
+                    //   key={category}
+                    //   className={classNames(
+                    //     "hover:bg-gray-100 border border-gray-100 rounded-md px-1 py-2 text-base font-medium whitespace-nowrap text-gray-900",
+                    //     { "text-primary": category === filter }
+                    //   )}
+                    //   type="button"
+                    //   onClick={() => updatedFilters(category)}
+                    // >
+                    //   {category}
+                    // </button>
                   ))}
                 </div>
               </div>

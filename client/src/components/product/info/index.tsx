@@ -102,14 +102,14 @@ const Info = ({ product }: Props) => {
             {product.attributes.map(attr => {
               if (attr.id === "Size") {
                 return (
-                  <div key={attr.id}>
+                  <div
+                    key={attr.id}
+                    data-testid={`product-attribute-${toKebabCase(attr.id)}`}
+                  >
                     <h3 className="text-md pb-2 pt-4 font-bold uppercase">
                       {attr.id}:
                     </h3>
-                    <ul
-                      className="flex gap-2"
-                      data-testid={`product-attribute-${toKebabCase(attr.id)}`}
-                    >
+                    <ul className="flex gap-2">
                       {sizes &&
                         sizes.map((size: Attribute) => (
                           <ToggleSize
@@ -119,7 +119,6 @@ const Info = ({ product }: Props) => {
                             size={size.value}
                             selectedSize={selectedAttributes[attr.id]}
                             setSelectedSize={handleItemSelect}
-                            // dataSet={}
                           />
                         ))}
                     </ul>

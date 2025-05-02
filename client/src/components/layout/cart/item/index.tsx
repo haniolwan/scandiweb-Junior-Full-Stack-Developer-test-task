@@ -229,7 +229,7 @@ const Item = ({ cartItem }: Props) => {
           </div>
           <div className="w-[121px] h-[167px] shrink-0 overflow-hidden">
             <img
-              src={matchingProduct.gallery[0]}
+              src={matchingProduct?.gallery[0]}
               alt="cart item"
               className="w-full h-full object-contain"
             />

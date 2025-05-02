@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Sidebar from "./sidebar";
-import Navigation from "./navigation";
+import { Navigation } from "./navigation";
 import CartPopup from "./cart/popup";
 import { Logo } from "../icons";
 import { OpenMenuButton } from "./buttons";
