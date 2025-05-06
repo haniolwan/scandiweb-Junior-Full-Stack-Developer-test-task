@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  php-docker-app:
+    build: .
+    container_name: php-docker-app
+    ports:
+      - "8101:8101" # Map the app's port to the host
+    volumes:
+      - ./api:/var/www/html # Mount the `api` directory for live updates
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  db:
+    image: mysql:8.0-oracle # Compatible with ARM64
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: scandiweb
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - app-network
+
+volumes:
+  db-data:
+
+networks:
+  app-network:
