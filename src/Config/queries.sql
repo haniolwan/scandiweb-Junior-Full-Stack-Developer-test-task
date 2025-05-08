@@ -138,7 +138,7 @@ VALUES
 
 -- Product ↔ Attribute Items
 INSERT INTO
-    attribute_items (id, attribute_id, display_value, value)
+    attribute_items (id, attribute_id, displayValue, value)
 VALUES
     ('Small', 'Size', 'Small', 'S'),
     ('Medium', 'Size', 'Medium', 'M'),
@@ -210,7 +210,7 @@ VALUES
 
 -- Attribute Items: Color
 INSERT INTO
-    attribute_items (id, attribute_id, display_value, value)
+    attribute_items (id, attribute_id, displayValue, value)
 VALUES
     ('Green', 'Color', 'Green', '#44FF03'),
     ('Cyan', 'Color', 'Cyan', '#03FFF7'),
@@ -220,7 +220,7 @@ VALUES
 
 -- Attribute Items: Capacity
 INSERT INTO
-    attribute_items (id, attribute_id, display_value, value)
+    attribute_items (id, attribute_id, displayValue, value)
 VALUES
     ('512G', 'Capacity', '512G', '512G'),
     ('1T', 'Capacity', '1T', '1T');

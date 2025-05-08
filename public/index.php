@@ -1,20 +1,22 @@
 <?php
 
+use App\Controllers\CategoryController;
+use App\Models\DBCategory;
+use Config\Database;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
 
-use Dotenv\Dotenv;
 
-$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-$dotenv->load();
+switch ($uri) {
+    case '/products':
+        (new ProductController())->index();
+        break;
 
-
-use Config\Config;
-
-Config::load();
-
-
-
-// $dbConnection = $db->connect();
+    case '/':
+        ((new CategoryController())->index());
+        echo "fetched";
+        break;
+}

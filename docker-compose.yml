@@ -1,31 +1,38 @@
 version: "3.8"
 
 services:
-  php-docker-app:
+  www:
+    image: php:apache
     build: .
-    container_name: php-docker-app
-    ports:
-      - "8101:8101" # Map the app's port to the host
+
     volumes:
-      - ./api:/var/www/html # Mount the `api` directory for live updates
-    depends_on:
-      - db
+      - "./:/var/www/html" # Syncs current project directory with Apache root directory in container
+    ports:
+      - "80:80"
+      - "443:443"
     networks:
       - app-network
 
   db:
-    image: mysql:8.0-oracle # Compatible with ARM64
-    container_name: db
+    image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: scandiweb
-    volumes:
-      - db-data:/var/lib/mysql
+      - MYSQL_DATABASE=scandiweb
+      - MYSQL_USER=db_user
+      - MYSQL_PASSWORD=password
     networks:
       - app-network
+    volumes:
+      - "./db:/docker-entrypoint-initdb.d" # generates the files for seeding db
 
-volumes:
-  db-data:
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8001:80"
+    environment:
+      - PMA_HOST=db
+      - PMA_PORT=3306
+    networks:
+      - app-network
 
 networks:
   app-network:

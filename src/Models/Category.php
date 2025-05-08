@@ -1,12 +1,9 @@
 <?php
-class Category
-{
-    private $id;
-    private $name;
 
-    public function __construct($id, $name)
-    {
-        $this->id = $id;
-        $this->name = $name;
-    }
+
+namespace App\Models;
+
+abstract class Category extends BaseModel
+{
+    abstract public function all();
 }

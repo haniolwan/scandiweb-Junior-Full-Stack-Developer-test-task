@@ -1,4 +1,8 @@
 <?php
+
+
+namespace App\Models;
+
 abstract class Product extends BaseModel
 {
     protected $id;
@@ -15,4 +19,7 @@ abstract class Product extends BaseModel
         $this->price = $price;
         $this->category_id = $category_id;
     }
+
+
+    public function all() {}
 }
