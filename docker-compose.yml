@@ -1,38 +1,48 @@
 version: "3.8"
 
 services:
+  # Apache + PHP service
   www:
     image: php:apache
-    build: .
-
     volumes:
-      - "./:/var/www/html" # Syncs current project directory with Apache root directory in container
+      - .:/var/www/html
+    # - ./vendor:/var/www/html/vendor
+    # - ./composer.json:/var/www/html/composer.json # Syncs current project directory with Apache root directory in container
     ports:
       - "80:80"
       - "443:443"
     networks:
       - app-network
+    depends_on:
+      - mysql
 
-  db:
+  # MySQL Database service
+  mysql:
     image: mysql:latest
+    ports:
+      - "3306:3306"
     environment:
       - MYSQL_DATABASE=scandiweb
       - MYSQL_USER=db_user
       - MYSQL_PASSWORD=password
+      - MYSQL_ROOT_PASSWORD=password
     networks:
       - app-network
     volumes:
-      - "./db:/docker-entrypoint-initdb.d" # generates the files for seeding db
+      - "./db:/docker-entrypoint-initdb.d" # Generates the files for seeding db
 
+  # phpMyAdmin for managing MySQL
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     ports:
       - "8001:80"
     environment:
-      - PMA_HOST=db
+      - PMA_HOST=mysql
       - PMA_PORT=3306
     networks:
       - app-network
 
+# Network configuration for service communication
 networks:
   app-network:
+    driver: bridge

@@ -11,6 +11,6 @@ class DBCategory extends Category
     {
         // this should handle database requests
         $stmt = $this->db->query("SELECT * FROM categories");
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return ($stmt->fetchAll(PDO::FETCH_ASSOC));
     }
 }

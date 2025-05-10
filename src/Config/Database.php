@@ -14,24 +14,22 @@ class Database
 
     public function __construct()
     {
-        $this->host = 'db'; // <-- this is the Docker service name
+        $this->host = 'mysql'; // <-- this is the Docker service name
         $this->dbname = 'scandiweb';
         $this->username = 'db_user';
         $this->password = 'password';
     }
 
-    public function connect(): PDO
+    protected function connect()
     {
         try {
-            $pdo = new PDO(
-                'mysql:host=' . $this->host . ';dbname=' . $this->dbname,
-                $this->username,
-                $this->password
-            );
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $pdo = new PDO("mysql:host=mysql;port=3306;dbname=scandiweb", "root", "password");
+
+            //        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            //        print_r($pdo);
             return $pdo;
         } catch (PDOException $e) {
-            die("Connection failed: " . $e->getMessage());
+            die("nnection failed: " . $e->getMessage());
         }
     }
 }

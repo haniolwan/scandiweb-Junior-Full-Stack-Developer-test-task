@@ -11,9 +11,9 @@ class CategoryController
     public function index()
     {
         try {
-            $ct_service = new CategoryService(new DBCategory());
-            $categories = $ct_service->all();
-            return Response::success('Categories fetched successfully', $categories);
+            $categoryService = new CategoryService();
+            $categories = $categoryService->all();
+            return Response::success('', $categories)->toJson();
         } catch (\Exception $error) {
             return Response::error('Error: ' . $error->getMessage());
         }

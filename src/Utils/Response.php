@@ -8,14 +8,11 @@ class Response
     private $message;
     private $data;
 
-
     public function __construct($status = 'success', $message = '', $data = null)
     {
         $this->status = $status;
         $this->message = $message;
         $this->data = $data;
-
-
         $this->setHeaders();
     }
 
@@ -25,17 +22,20 @@ class Response
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
         header('Access-Control-Allow-Headers: Content-Type');
+        return $this;
     }
 
 
     public function setMessage($message)
     {
         $this->message = $message;
+        return $this;
     }
 
     public function setData($data)
     {
         $this->data = $data;
+        return $this;
     }
 
     public function toArray()
