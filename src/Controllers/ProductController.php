@@ -1,9 +1,27 @@
 <?php
 
+namespace App\Controllers;
 
-use Models\Products;
+use App\Services\ProductService;
+use App\Utils\Response;
+use Exception;
 
 class ProductController
 {
-    public function index() {}
+
+    private $productService;
+    public function __construct(ProductService $productService)
+    {
+        $this->productService = $productService;
+    }
+
+    public function index()
+    {
+        try {
+            $products = $this->productService->all();
+            return Response::success('', $products)->toJson();
+        } catch (Exception $error) {
+            return Response::error('Error: ' . $error->getMessage());
+        }
+    }
 }

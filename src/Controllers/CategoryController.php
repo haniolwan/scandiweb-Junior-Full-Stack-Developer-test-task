@@ -2,17 +2,23 @@
 
 namespace App\Controllers;
 
-use App\Models\DBCategory;
 use App\Services\CategoryService;
 use App\Utils\Response;
 
 class CategoryController
 {
+
+    private CategoryService $categoryService;
+
+    public function __construct(CategoryService $categoryService)
+    {
+        $this->categoryService = $categoryService;
+    }
+
     public function index()
     {
         try {
-            $categoryService = new CategoryService();
-            $categories = $categoryService->all();
+            $categories = $this->categoryService->all();
             return Response::success('', $categories)->toJson();
         } catch (\Exception $error) {
             return Response::error('Error: ' . $error->getMessage());

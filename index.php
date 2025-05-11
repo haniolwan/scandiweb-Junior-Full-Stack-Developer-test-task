@@ -1,28 +1,59 @@
 <?php
 
-use App\Controllers\CategoryController;
 
 require __DIR__ . '/vendor/autoload.php'; // or './vendor/autoload.php' if same level
 
 
-$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
+    $r->post('/graphql', [App\Controller\GraphQL::class, 'handle']);
+});
 
-$response = "";
-switch ($uri) {
-    case '/':
-        $categoryController = new CategoryController();
-        $response = $categoryController->index();
-        break;
-    case '/products':
-        (new ProductController())->index();
-        break;
 
-    case '/categories':
-        $response = (new CategoryController())->index();
+$routeInfo = $dispatcher->dispatch(
+    $_SERVER['REQUEST_METHOD'],
+    $_SERVER['REQUEST_URI']
+);
+
+
+switch ($routeInfo[0]) {
+    case FastRoute\Dispatcher::NOT_FOUND:
+        // ... 404 Not Found
         break;
-    default:
-        throw new NotFoundException();
+    case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
+        $allowedMethods = $routeInfo[1];
+        // ... 405 Method Not Allowed
+        break;
+    case FastRoute\Dispatcher::FOUND:
+        $handler = $routeInfo[1];
+        $vars = $routeInfo[2];
+        echo $handler($vars);
+        break;
 }
 
-echo $response;
+// $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
+
+// $response = "";
+// switch ($uri) {
+
+//     case '/':
+//         break;
+
+//     case '/categories':
+//         $controller = CategoryControllerFactory::create();
+//         $response = $controller->index();
+//         break;
+//     case '/products':
+//         $controller = ProductControllerFactory::create();
+//         $response = $controller->index();
+//         break;
+
+//     case '/products':
+//         $controller = ProductControllerFactory::create();
+//         $response = $controller->index();
+//         break;
+
+//     default:;
+// }
+
+// echo $response;
