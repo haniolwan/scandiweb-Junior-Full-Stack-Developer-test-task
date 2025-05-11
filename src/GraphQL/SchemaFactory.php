@@ -2,10 +2,9 @@
 
 namespace App\GraphQL;
 
+use App\GraphQL\Query\ProductQuery;
 use GraphQL\Type\Schema;
-use App\GraphQL\Mutations\ProductMutations;
 use GraphQL\Type\Definition\ObjectType;
-use ProductQuery;
 
 class SchemaFactory
 {
@@ -14,20 +13,12 @@ class SchemaFactory
         $queryType = new ObjectType([
             'name' => 'Query',
             'fields' => [
-                'products' => ProductQuery::get(), // Create this class
+                'products' => ProductQuery::get(),
             ],
         ]);
 
-        // $mutationType = new ObjectType([
-        //     'name' => 'Mutation',
-        //     'fields' => [
-        //         'createProduct' => ProductMutations::create(), // Also create this
-        //     ],
-        // ]);
-
         return new Schema([
             'query' => $queryType,
-            // 'mutation' => $mutationType,
         ]);
     }
 }

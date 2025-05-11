@@ -1,13 +1,10 @@
 <?php
 
-
-require __DIR__ . '/vendor/autoload.php'; // or './vendor/autoload.php' if same level
-
+require __DIR__ . '/vendor/autoload.php';
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
-    $r->post('/graphql', [App\Controller\GraphQL::class, 'handle']);
+    $r->post('/graphql', [\App\Controllers\GraphQL::class, 'handle']);
 });
-
 
 $routeInfo = $dispatcher->dispatch(
     $_SERVER['REQUEST_METHOD'],
@@ -29,31 +26,3 @@ switch ($routeInfo[0]) {
         echo $handler($vars);
         break;
 }
-
-// $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-
-
-// $response = "";
-// switch ($uri) {
-
-//     case '/':
-//         break;
-
-//     case '/categories':
-//         $controller = CategoryControllerFactory::create();
-//         $response = $controller->index();
-//         break;
-//     case '/products':
-//         $controller = ProductControllerFactory::create();
-//         $response = $controller->index();
-//         break;
-
-//     case '/products':
-//         $controller = ProductControllerFactory::create();
-//         $response = $controller->index();
-//         break;
-
-//     default:;
-// }
-
-// echo $response;

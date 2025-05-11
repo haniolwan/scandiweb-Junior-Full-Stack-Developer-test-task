@@ -8,7 +8,7 @@ import { mockData } from "../../assets/dummyData/Data";
 import { Category } from "../../helpers/types";
 import { Outlet, useLocation } from "react-router";
 import Overlay from "./overlay";
-
+import { createClient, Provider, cacheExchange, fetchExchange } from "urql";
 const Layout = () => {
   const [openSidebar, setOpenSidebar] = useState(false);
   const [openCart, setOpenCart] = useState(false);
@@ -23,8 +23,16 @@ const Layout = () => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
+  const client = createClient({
+    url: "http://localhost/graphql/",
+    exchanges: [
+      cacheExchange, // Provides caching functionality
+      fetchExchange, // Performs the actual HTTP request
+    ],
+  });
+
   return (
-    <>
+    <Provider value={client}>
       <Overlay open={openCart} />
       <div>
         <Sidebar
@@ -46,7 +54,7 @@ const Layout = () => {
           <Outlet />
         </nav>
       </div>
-    </>
+    </Provider>
   );
 };
 

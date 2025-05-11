@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controllers;
 
-use App\GraphQL\SchemaFactory;
+use App\GraphQL\Query\ProductQuery;
 use GraphQL\GraphQL as GraphQLBase;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
@@ -16,8 +16,23 @@ class GraphQL
     static public function handle()
     {
         try {
+            $queryType = new ObjectType([
+                'name' => 'Query',
+                'fields' => [
+                    'echo' => [
+                        'type' => Type::string(),
+                        'args' => [
+                            'message' => ['type' => Type::string()],
+                        ],
+                        'resolve' =>  ProductQuery::get(),
+                    ],
+                ],
+            ]);
 
-            $schema = SchemaFactory::build(); // Your custom schema builder
+            $schema = new Schema(
+                (new SchemaConfig())
+                    ->setQuery($queryType)
+            );
 
             $rawInput = file_get_contents('php://input');
             if ($rawInput === false) {
