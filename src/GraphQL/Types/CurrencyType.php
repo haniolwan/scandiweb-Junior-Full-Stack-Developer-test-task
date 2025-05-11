@@ -3,15 +3,16 @@
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 
-class CategoryType extends ObjectType
+class CurrencyType extends ObjectType
 {
     public function __construct()
     {
         parent::__construct([
-            'name' => 'Category',
+            'name' => 'Currency',
             'fields' => [
                 'id' => Type::nonNull(Type::int()),
-                'name' => Type::nonNull(Type::string()),
+                'label' => Type::nonNull(Type::string()),
+                'symbol' => Type::nonNull(Type::string()),
             ],
         ]);
     }
