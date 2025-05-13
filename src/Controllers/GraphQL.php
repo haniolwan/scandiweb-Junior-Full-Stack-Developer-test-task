@@ -29,12 +29,12 @@ class GraphQL
                             return ProductQuery::get();
                         }
                     ],
-                    // 'categories' => [
-                    //     'type' => Type::listOf(new CategoryType()),
-                    //     'resolve' => function () {
-                    //         return CategoryQuery::get();
-                    //     }
-                    // ]
+                    'categories' => [
+                        'type' => Type::listOf(new CategoryType()),
+                        'resolve' => function () {
+                            return CategoryQuery::get();
+                        }
+                    ]
                 ]
             ]);
 

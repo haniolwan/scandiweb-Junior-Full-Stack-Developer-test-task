@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Services\ProductService;
 use App\Utils\Response;
+use Exception;
 
 class ProductController
 {
@@ -20,7 +21,8 @@ class ProductController
         try {
             $products = $this->productService->all();
             return $products;
-        } catch (\Exception $error) {
+            // return Response::success('Error: ', $products)->toJson();
+        } catch (Exception $error) {
             return Response::error('Error: ' . $error->getMessage());
         }
     }

@@ -18,7 +18,7 @@ $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 
 
-switch ($uri) {
+switch ($routeInfo[0]) {
 
     case '/categories':
         // ... 200 OK
@@ -28,7 +28,7 @@ switch ($uri) {
     case '/products':
         // ... 200 OK
         $controller = ProductControllerFactory::create();
-        print_r($controller->index()[0]);
+        print_r($controller->index());
         break;
     case FastRoute\Dispatcher::NOT_FOUND:
         // ... 404 Not Found
