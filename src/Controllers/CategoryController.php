@@ -20,7 +20,6 @@ class CategoryController
         try {
             $categories = $this->categoryService->all();
             return $categories;
-            // return Response::success('', $categories)->toJson();
         } catch (\Exception $error) {
             return Response::error('Error: ' . $error->getMessage());
         }

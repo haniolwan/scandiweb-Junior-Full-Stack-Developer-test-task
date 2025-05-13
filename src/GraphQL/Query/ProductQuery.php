@@ -3,8 +3,6 @@
 namespace App\GraphQL\Query;
 
 use App\Factories\ProductControllerFactory;
-use App\GraphQL\Types\ProductType;
-use GraphQL\Type\Definition\Type;
 
 class ProductQuery
 {

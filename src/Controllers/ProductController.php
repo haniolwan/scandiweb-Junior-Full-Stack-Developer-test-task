@@ -21,7 +21,6 @@ class ProductController
         try {
             $products = $this->productService->all();
             return $products;
-            // return Response::success('Error: ', $products)->toJson();
         } catch (Exception $error) {
             return Response::error('Error: ' . $error->getMessage());
         }

@@ -2,11 +2,12 @@
 
 namespace App\Controllers;
 
-use App\Factories\CategoryControllerFactory;
 use App\GraphQL\Query\CategoryQuery;
 use App\GraphQL\Query\ProductQuery;
 use App\GraphQL\Types\CategoryType;
+use App\GraphQL\Types\OrderType;
 use App\GraphQL\Types\ProductType;
+use App\Models\Order;
 use GraphQL\GraphQL as GraphQLBase;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
@@ -46,17 +47,33 @@ class GraphQL
                 ]
             ]);
 
-
             $mutationType = new ObjectType([
                 'name' => 'Mutation',
                 'fields' => [
-                    'order' => [
-                        'type' => new ProductType(),
+                    'createOrder' => [
+                        'type' => new OrderType(),
                         'args' => [
-                            'x' => ['type' => Type::int()],
-                            'y' => ['type' => Type::int()],
+                            'product_id' => Type::nonNull(Type::string()),
+                            'currency_label' => Type::nonNull(Type::string()),
+                            'price' => Type::nonNull(Type::float()),
+                            'quantity' => Type::nonNull(Type::int()),
+                            'attribute_item_ids' => Type::nonNull(Type::string()),
                         ],
-                        'resolve' => static fn($calc, array $args): int => $args['x'] + $args['y'],
+                        'resolve' => function ($root, $args) {
+                            try {
+                                $order = new Order();
+                                $order->product_id = $args['product_id'];
+                                $order->currency_label = $args['currency_label'];
+                                $order->price = $args['price'];
+                                $order->quantity = $args['quantity'];
+                                $order->attribute_item_ids = $args['attribute_item_ids'];
+                                $order->save();
+                                return $order;
+                            } catch (Throwable $e) {
+                                error_log('Error creating order: ' . $e->getMessage());
+                                return null;
+                            }
+                        }
                     ],
                 ],
             ]);
