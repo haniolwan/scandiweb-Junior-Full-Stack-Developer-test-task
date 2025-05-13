@@ -3,6 +3,9 @@
 require __DIR__ . '/vendor/autoload.php';
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Headers: Content-Type, Authorization");
+    header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
     $r->post('/graphql', [\App\Controllers\GraphQL::class, 'handle']);
 });
 

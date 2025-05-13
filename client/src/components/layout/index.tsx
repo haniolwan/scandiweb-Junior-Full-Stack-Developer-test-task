@@ -4,18 +4,13 @@ import { Navigation } from "./navigation";
 import CartPopup from "./cart/popup";
 import { Logo } from "../icons";
 import { OpenMenuButton } from "./buttons";
-import { mockData } from "../../assets/dummyData/Data";
-import { Category } from "../../helpers/types";
 import { Outlet, useLocation } from "react-router";
 import Overlay from "./overlay";
-import { createClient, Provider, cacheExchange, fetchExchange } from "urql";
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+
 const Layout = () => {
   const [openSidebar, setOpenSidebar] = useState(false);
   const [openCart, setOpenCart] = useState(false);
-
-  const categories = (mockData.data.categories as Category[]).map(
-    category => category.name
-  );
 
   const { pathname } = useLocation();
 
@@ -23,23 +18,18 @@ const Layout = () => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  const client = createClient({
-    url: "http://localhost/graphql/",
-    exchanges: [
-      cacheExchange, // Provides caching functionality
-      fetchExchange, // Performs the actual HTTP request
-    ],
+  const apiUrl = import.meta.env.VITE_API_URL;
+
+  const client = new ApolloClient({
+    uri: apiUrl,
+    cache: new InMemoryCache(),
   });
 
   return (
-    <Provider value={client}>
+    <ApolloProvider client={client}>
       <Overlay open={openCart} />
       <div>
-        <Sidebar
-          categories={categories}
-          open={openSidebar}
-          setOpen={setOpenSidebar}
-        />
+        <Sidebar open={openSidebar} setOpen={setOpenSidebar} />
         <nav aria-label="Top" className="">
           <div
             className="relative flex h-16 items-center !bg-white !z-40
@@ -47,14 +37,14 @@ const Layout = () => {
           "
           >
             <OpenMenuButton setOpen={setOpenSidebar} />
-            <Navigation categories={categories} />
+            <Navigation />
             <Logo />
             <CartPopup open={openCart} setOpen={setOpenCart} />
           </div>
           <Outlet />
         </nav>
       </div>
-    </Provider>
+    </ApolloProvider>
   );
 };
 

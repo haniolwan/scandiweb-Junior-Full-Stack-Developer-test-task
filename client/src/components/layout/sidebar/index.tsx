@@ -1,16 +1,16 @@
 import { Dispatch, SetStateAction, useRef } from "react";
 import { CloseMenuIcon } from "../../icons";
-// import { useProductFilters } from "../../../context/productFilters";
 import classNames from "classnames";
 import useOutsideClick from "../../../hooks/useOutsideClick";
 import { CategoryNav } from "../navigation";
+import { Category } from "../../../helpers/types";
+import { useQuery, gql } from "@apollo/client";
 
 type Props = {
-  categories: string[];
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 };
-const Sidebar = ({ categories, open, setOpen }: Props) => {
+const Sidebar = ({ open, setOpen }: Props) => {
   const CloseMenu = ({
     setOpen,
   }: {
@@ -36,6 +36,17 @@ const Sidebar = ({ categories, open, setOpen }: Props) => {
   const sidebarRef = useRef<HTMLDivElement | null>(null);
 
   useOutsideClick(sidebarRef, () => setOpen(false));
+
+  const CATEGORIES_QUERY = gql`
+    {
+      categories {
+        id
+        name
+      }
+    }
+  `;
+
+  const { data } = useQuery(CATEGORIES_QUERY);
 
   return (
     <>
@@ -65,19 +76,8 @@ const Sidebar = ({ categories, open, setOpen }: Props) => {
                   className="flex flex-col px-4 space-y-2"
                   aria-orientation="vertical"
                 >
-                  {categories.map(category => (
-                    <CategoryNav key={category} category={category} />
-                    // <button
-                    //   key={category}
-                    //   className={classNames(
-                    //     "hover:bg-gray-100 border border-gray-100 rounded-md px-1 py-2 text-base font-medium whitespace-nowrap text-gray-900",
-                    //     { "text-primary": category === filter }
-                    //   )}
-                    //   type="button"
-                    //   onClick={() => updatedFilters(category)}
-                    // >
-                    //   {category}
-                    // </button>
+                  {data?.categories?.map(({ id, name }: Category) => (
+                    <CategoryNav key={id} category={name} />
                   ))}
                 </div>
               </div>

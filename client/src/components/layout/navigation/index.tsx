@@ -1,9 +1,7 @@
 import classNames from "classnames";
 import { useProductFilters } from "../../../context/productFilters";
-
-type Props = {
-  categories: string[];
-};
+import { useQuery, gql } from "@apollo/client";
+import { Category } from "../../../helpers/types";
 
 export const CategoryNav = ({ category }: { category: string }) => {
   const { filter, updatedFilters } = useProductFilters();
@@ -30,12 +28,23 @@ export const CategoryNav = ({ category }: { category: string }) => {
     </div>
   );
 };
-export const Navigation = ({ categories }: Props) => {
+export const Navigation = () => {
+  const CATEGORIES_QUERY = gql`
+    {
+      categories {
+        id
+        name
+      }
+    }
+  `;
+
+  const { data } = useQuery(CATEGORIES_QUERY);
+
   return (
     <div className="hidden lg:ml-8 lg:block lg:self-stretch">
       <div className="flex h-full space-x-8">
-        {categories.map(category => (
-          <CategoryNav key={category} category={category} />
+        {data?.categories?.map(({ id, name }: Category) => (
+          <CategoryNav key={id} category={name} />
         ))}
       </div>
     </div>

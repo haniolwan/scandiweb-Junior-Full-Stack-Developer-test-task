@@ -22,6 +22,7 @@ export interface CartItem {
 }
 
 export type Category = {
+  id: string;
   name: string;
   __typename: "Category";
 };

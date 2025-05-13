@@ -4,6 +4,7 @@ import useOutsideClick from "../../../../hooks/useOutsideClick";
 import Item from "../item";
 import { useTotalCartItems } from "../../../../context/cartItems";
 import { v4 as uuid } from "uuid";
+import { gql, useMutation } from "@apollo/client";
 
 type Props = {
   open: boolean;
@@ -27,14 +28,37 @@ const CartPopup = ({ open, setOpen }: Props) => {
   );
 
   const [, setLoading] = useState(true);
-  const handlePlaceOrder = (event: MouseEvent<HTMLButtonElement>) => {
-    // todo make api request => It has to perform respective GraphQL mutation that as a result will create a new order in DB
-    if (cartTotal > 0) {
-      setLoading(true);
-      updateSelectedCartItems([]);
-      updateDisplayCartItems([]);
+  const CREATE_ORDER_MUTATION = gql`
+    mutation {
+      createOrder(
+        product_id: "huarache-x-stussy-le"
+        currency_label: "USD"
+        price: 99.99
+        quantity: 2
+        attribute_item_ids: "1T"
+      ) {
+        id
+      }
+    }
+  `;
+
+  const [createOrder] = useMutation(CREATE_ORDER_MUTATION);
+
+  const handlePlaceOrder = async (event: MouseEvent<HTMLButtonElement>) => {
+    try {
+      if (cartTotal > 0) {
+        event.currentTarget.disabled = true;
+        setLoading(true);
+
+        await createOrder();
+
+        updateSelectedCartItems([]);
+        updateDisplayCartItems([]);
+      }
+    } catch (error) {
+      console.error("Error creating order:", error);
+    } finally {
       setLoading(false);
-      event.currentTarget.disabled = true;
     }
   };
 
