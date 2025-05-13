@@ -10,12 +10,7 @@ class ProductQuery
 {
     public static function get()
     {
-        return [
-            'type' => Type::listOf(new ProductType()),
-            'resolve' => function () {
-                $controller = ProductControllerFactory::create();
-                return $controller->index();
-            }
-        ];
+        $controller = ProductControllerFactory::create();
+        return $controller->index();
     }
 }

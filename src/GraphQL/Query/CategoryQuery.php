@@ -3,19 +3,12 @@
 namespace App\GraphQL\Query;
 
 use App\Factories\CategoryControllerFactory;
-use App\GraphQL\Types\CategoryType;
-use GraphQL\Type\Definition\Type;
 
 class CategoryQuery
 {
-    public static function get()
+    public static function get(): array
     {
-        return [
-            'type' => Type::listOf(new CategoryType()),
-            'resolve' => function () {
-                $controller = CategoryControllerFactory::create();
-                return $controller->index();
-            }
-        ];
+        $controller = CategoryControllerFactory::create();
+        return $controller->index();
     }
 }

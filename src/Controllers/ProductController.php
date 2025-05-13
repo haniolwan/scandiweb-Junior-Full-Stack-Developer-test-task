@@ -4,12 +4,12 @@ namespace App\Controllers;
 
 use App\Services\ProductService;
 use App\Utils\Response;
-use Exception;
 
 class ProductController
 {
 
     private $productService;
+
     public function __construct(ProductService $productService)
     {
         $this->productService = $productService;
@@ -19,8 +19,8 @@ class ProductController
     {
         try {
             $products = $this->productService->all();
-            return Response::success('', $products)->toJson();
-        } catch (Exception $error) {
+            return $products;
+        } catch (\Exception $error) {
             return Response::error('Error: ' . $error->getMessage());
         }
     }

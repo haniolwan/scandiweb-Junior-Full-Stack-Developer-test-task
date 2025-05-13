@@ -14,31 +14,33 @@ class ProductType extends ObjectType
             'fields' => [
                 'id' => Type::nonNull(Type::int()),
                 'name' => Type::nonNull(Type::string()),
-                'inStock' => Type::nonNull(Type::boolean()),
+                'inStock' => Type::boolean(),
                 'gallery' => [
-                    'type' => Type::nonNull(Type::listOf(Type::string())),
+                    'type' => Type::listOf(Type::string()),
                 ],
-                'description' => Type::nonNull(Type::string()),
+                'description' => Type::string(),
                 'price' => Type::float(),
-                'category' => [
-                    'type' => new CategoryType(), // circular deps? use lazy loading if needed
-                    'resolve' => function ($product) {
-                        return $product['category'];
-                    },
-                ],
-                'attributes' => [
-                    'type' => Type::listOf(Type::nonNull(new AttributeType())),
-                    'resolve' => function ($product) {
-                        return $product['attributes'];
-                    },
-                ],
-                'prices' => [
-                    'type' => Type::listOf(Type::nonNull(new PriceType())),
-                    'resolve' => function ($product) {
-                        return $product['prices'];
-                    },
-                ],
-                'brand' => Type::nonNull(Type::string()),
+                // 'category' => [
+                //     'type' => function () {
+                //         return new CategoryType();
+                //     },
+                //     'resolve' => function ($product) {
+                //         return $product['category'];
+                //     },
+                // ],
+                // 'attributes' => [
+                //     'type' => Type::listOf(new AttributeType()),
+                //     'resolve' => function ($product) {
+                //         return $product['attributes'];
+                //     },
+                // ],
+                // 'prices' => [
+                //     'type' => Type::listOf(new PriceType()),
+                //     'resolve' => function ($product) {
+                //         return $product['prices'];
+                //     },
+                // ],
+                'brand' => Type::string(),
             ],
         ]);
     }

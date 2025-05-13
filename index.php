@@ -1,5 +1,8 @@
 <?php
 
+use App\Factories\CategoryControllerFactory;
+use App\Factories\ProductControllerFactory;
+
 require __DIR__ . '/vendor/autoload.php';
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
@@ -11,8 +14,22 @@ $routeInfo = $dispatcher->dispatch(
     $_SERVER['REQUEST_URI']
 );
 
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-switch ($routeInfo[0]) {
+
+
+switch ($uri) {
+
+    case '/categories':
+        // ... 200 OK
+        $controller = CategoryControllerFactory::create();
+        print_r($controller->index());
+        break;
+    case '/products':
+        // ... 200 OK
+        $controller = ProductControllerFactory::create();
+        print_r($controller->index()[0]);
+        break;
     case FastRoute\Dispatcher::NOT_FOUND:
         // ... 404 Not Found
         break;

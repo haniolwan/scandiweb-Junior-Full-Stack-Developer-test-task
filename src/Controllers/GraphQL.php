@@ -2,7 +2,11 @@
 
 namespace App\Controllers;
 
+use App\Factories\CategoryControllerFactory;
+use App\GraphQL\Query\CategoryQuery;
 use App\GraphQL\Query\ProductQuery;
+use App\GraphQL\Types\CategoryType;
+use App\GraphQL\Types\ProductType;
 use GraphQL\GraphQL as GraphQLBase;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
@@ -19,14 +23,19 @@ class GraphQL
             $queryType = new ObjectType([
                 'name' => 'Query',
                 'fields' => [
-                    'echo' => [
-                        'type' => Type::string(),
-                        'args' => [
-                            'message' => ['type' => Type::string()],
-                        ],
-                        'resolve' =>  ProductQuery::get(),
+                    'products' => [
+                        'type' => Type::listOf(new ProductType()),
+                        'resolve' => function () {
+                            return ProductQuery::get();
+                        }
                     ],
-                ],
+                    // 'categories' => [
+                    //     'type' => Type::listOf(new CategoryType()),
+                    //     'resolve' => function () {
+                    //         return CategoryQuery::get();
+                    //     }
+                    // ]
+                ]
             ]);
 
             $schema = new Schema(
@@ -40,12 +49,23 @@ class GraphQL
             }
 
             $input = json_decode($rawInput, true);
-            $query = $input['query'];
+            if ($input === null) {
+                throw new RuntimeException('Invalid JSON input: ' . json_last_error_msg());
+            }
+
+            $query = $input['query'] ?? null;
+            if ($query === null) {
+                throw new RuntimeException('No query provided in the input.');
+            }
+
             $variableValues = $input['variables'] ?? null;
 
-            $rootValue = ['prefix' => 'You said: '];
-            $result = GraphQLBase::executeQuery($schema, $query, $rootValue, null, $variableValues);
+            $result = GraphQLBase::executeQuery($schema, $query, null, null, $variableValues);
             $output = $result->toArray();
+
+            if (isset($output['errors'])) {
+                error_log(print_r($output['errors'], true));
+            }
         } catch (Throwable $e) {
             $output = [
                 'error' => [
@@ -55,6 +75,7 @@ class GraphQL
         }
 
         header('Content-Type: application/json; charset=UTF-8');
-        return json_encode($output);
+        echo json_encode($output);
+        exit;
     }
 }
