@@ -26,4 +26,14 @@ class ProductController
             return Response::error('Error: ' . $error->getMessage());
         }
     }
+
+    public function show($id)
+    {
+        try {
+            $product = $this->productService->show($id);
+            return $product;
+        } catch (Exception $error) {
+            return Response::error('Error: ' . $error->getMessage());
+        }
+    }
 }

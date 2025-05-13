@@ -13,4 +13,10 @@ class ProductQuery
         $controller = ProductControllerFactory::create();
         return $controller->index();
     }
+
+    public static function find($id)
+    {
+        $controller = ProductControllerFactory::create();
+        return $controller->show($id);
+    }
 }

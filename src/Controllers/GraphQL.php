@@ -25,8 +25,16 @@ class GraphQL
                 'fields' => [
                     'products' => [
                         'type' => Type::listOf(new ProductType()),
-                        'resolve' => function () {
-                            return ProductQuery::get();
+                        'args' => [
+                            'id' => Type::string(), // optional
+                        ],
+                        'resolve' => function ($root, $args) {
+                            if (isset($args['id'])) {
+                                $product = ProductQuery::find($args['id']);
+                                return $product ? [$product] : [];
+                            } else {
+                                return ProductQuery::get();
+                            }
                         }
                     ],
                     'categories' => [
@@ -38,9 +46,27 @@ class GraphQL
                 ]
             ]);
 
+
+            $mutationType = new ObjectType([
+                'name' => 'Mutation',
+                'fields' => [
+                    'order' => [
+                        'type' => new ProductType(),
+                        'args' => [
+                            'x' => ['type' => Type::int()],
+                            'y' => ['type' => Type::int()],
+                        ],
+                        'resolve' => static fn($calc, array $args): int => $args['x'] + $args['y'],
+                    ],
+                ],
+            ]);
+
+
             $schema = new Schema(
                 (new SchemaConfig())
                     ->setQuery($queryType)
+                    ->setMutation($mutationType)
+
             );
 
             $rawInput = file_get_contents('php://input');

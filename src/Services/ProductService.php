@@ -21,7 +21,6 @@ class ProductService extends Product
 
     public function show($id)
     {
-        // get params
         return $this->product->show($id);
     }
 }
