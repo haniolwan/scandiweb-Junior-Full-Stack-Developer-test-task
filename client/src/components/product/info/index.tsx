@@ -9,6 +9,7 @@ type Props = {
   product: Product;
 };
 const Info = ({ product }: Props) => {
+  console.log(product);
   const [selectedAttributes, setSelectedAttributes] = useState(() => {
     return product.attributes.reduce((acc, attr) => {
       acc[attr.id] = "";
@@ -75,6 +76,7 @@ const Info = ({ product }: Props) => {
         selectedAttributes,
         quantity: 1,
         price: product.prices[0].amount,
+        currencyLabel: product.prices[0].currency.symbol,
       });
     }
 
@@ -157,33 +159,35 @@ const Info = ({ product }: Props) => {
 
                     <fieldset aria-label="Choose a size" className="mt-2">
                       <div className="flex gap-2">
-                        {attr.items.map(item => (
-                          <label
-                            key={item.id}
-                            className={classNames(
-                              {
-                                "!bg-gray-900 !text-white":
-                                  selectedAttributes[attr.id] === item.value,
-                              },
-                              "w-16 h-14 hover:text-gray-900 group relative flex cursor-pointer items-center justify-center rounded-md border bg-white text-sm font-medium text-gray-900 uppercase shadow-xs hover:bg-gray-300 focus:outline-hidden sm:flex-1"
-                            )}
-                            onClick={() =>
-                              handleItemSelect(attr.id, item.value)
-                            }
-                          >
-                            <input
-                              type="radio"
-                              name={attr.name}
-                              value={item.value}
-                              className="sr-only"
-                            />
-                            <span>{item.value}</span>
-                            <span
-                              className="pointer-events-none absolute -inset-px rounded-md"
-                              aria-hidden="true"
-                            ></span>
-                          </label>
-                        ))}
+                        {attr.items.map(item => {
+                          return (
+                            <label
+                              key={item.id}
+                              className={classNames(
+                                {
+                                  "!bg-gray-900 !text-white":
+                                    selectedAttributes[attr.id] === item.value,
+                                },
+                                "w-16 h-14 hover:text-gray-900 group relative flex cursor-pointer items-center justify-center rounded-md border bg-white text-sm font-medium text-gray-900 uppercase shadow-xs hover:bg-gray-300 focus:outline-hidden sm:flex-1"
+                              )}
+                              onClick={() =>
+                                handleItemSelect(attr.id, item.value)
+                              }
+                            >
+                              <input
+                                type="radio"
+                                name={attr.name}
+                                value={item.value}
+                                className="sr-only"
+                              />
+                              <span>{item.value}</span>
+                              <span
+                                className="pointer-events-none absolute -inset-px rounded-md"
+                                aria-hidden="true"
+                              ></span>
+                            </label>
+                          );
+                        })}
                       </div>
                     </fieldset>
                   </div>

@@ -3,12 +3,13 @@ import { Product } from "../../../helpers/types";
 import { CartIcon } from "../../icons";
 import { Link } from "react-router";
 import { useTotalCartItems } from "../../../context/cartItems";
+import { memo } from "react";
 
 type Props = {
   product: Product;
 };
 
-const Card = ({ product }: Props) => {
+const Card = memo(({ product }: Props) => {
   const usdPrice = product.prices.map(
     price => price.currency.label === "USD" && "$" + price.amount.toFixed(2)
   )[0]; // get usd price
@@ -112,6 +113,6 @@ const Card = ({ product }: Props) => {
       </Link>
     </div>
   );
-};
+});
 
 export default Card;

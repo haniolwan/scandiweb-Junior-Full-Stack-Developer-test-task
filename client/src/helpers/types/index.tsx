@@ -19,6 +19,7 @@ export interface CartItem {
   };
   quantity: number;
   price: number;
+  currencyLabel: string;
 }
 
 export type Category = {

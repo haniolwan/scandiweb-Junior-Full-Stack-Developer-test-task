@@ -5,7 +5,7 @@
 -- --------------------------------------------------------
 CREATE TABLE categories(
     id INT AUTO_INCREMENT PRIMARY KEY,
-    NAME VARCHAR(255) UNIQUE NOT NULL
+    name VARCHAR(255) UNIQUE NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -13,7 +13,7 @@ CREATE TABLE categories(
 -- --------------------------------------------------------
 CREATE TABLE products(
     id VARCHAR(255) PRIMARY KEY,
-    NAME VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
     inStock BOOLEAN NOT NULL,
     description TEXT,
     category_id INT,
@@ -36,8 +36,8 @@ CREATE TABLE galleries(
 -- --------------------------------------------------------
 CREATE TABLE attributes(
     id VARCHAR(255) PRIMARY KEY,
-    NAME VARCHAR(255) NOT NULL,
-    TYPE VARCHAR(50) NOT NULL
+    name VARCHAR(255) NOT NULL,
+    type VARCHAR(50) NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -47,7 +47,7 @@ CREATE TABLE attribute_items(
     id VARCHAR(255) PRIMARY KEY,
     attribute_id VARCHAR(255),
     displayValue VARCHAR(255),
-    VALUE VARCHAR(255),
+    value VARCHAR(255),
     FOREIGN KEY(attribute_id) REFERENCES attributes(id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -67,9 +67,11 @@ CREATE TABLE product_attributes(
 -- --------------------------------------------------------
 CREATE TABLE product_attribute_items(
     product_id VARCHAR(255),
+    attribute_id VARCHAR(255),
     attribute_item_id VARCHAR(255),
-    PRIMARY KEY(product_id, attribute_item_id),
+    PRIMARY KEY(product_id, attribute_id, attribute_item_id),
     FOREIGN KEY(product_id) REFERENCES products(id),
+    FOREIGN KEY(attribute_id) REFERENCES attributes(id),
     FOREIGN KEY(attribute_item_id) REFERENCES attribute_items(id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -124,9 +126,9 @@ CREATE TABLE `order_items` (
 -- --------------------------------------------------------
 -- Inserting data into `categories`
 -- --------------------------------------------------------
-INSERT INTO categories(NAME) VALUES('all');
-INSERT INTO categories(NAME) VALUES('clothes');
-INSERT INTO categories(NAME) VALUES('tech');
+INSERT INTO categories(name) VALUES('all');
+INSERT INTO categories(name) VALUES('clothes');
+INSERT INTO categories(name) VALUES('tech');
 
 -- --------------------------------------------------------
 -- Inserting data into `currencies`
@@ -137,14 +139,14 @@ INSERT INTO currencies(label, symbol) VALUES('USD', '$');
 -- Inserting data into `products`
 -- --------------------------------------------------------
 -- We need to get category_id values first
-SET @all_category_id = (SELECT id FROM categories WHERE NAME = 'all');
-SET @clothes_category_id = (SELECT id FROM categories WHERE NAME = 'clothes');
-SET @tech_category_id = (SELECT id FROM categories WHERE NAME = 'tech');
+SET @all_category_id = (SELECT id FROM categories WHERE name = 'all');
+SET @clothes_category_id = (SELECT id FROM categories WHERE name = 'clothes');
+SET @tech_category_id = (SELECT id FROM categories WHERE name = 'tech');
 
 -- Insert products with their respective category IDs
 INSERT INTO products(
     id,
-    NAME,
+    name,
     inStock,
     description,
     category_id,
@@ -160,7 +162,7 @@ INSERT INTO products(
 
 INSERT INTO products(
     id,
-    NAME,
+    name,
     inStock,
     description,
     category_id,
@@ -176,7 +178,7 @@ INSERT INTO products(
 
 INSERT INTO products(
     id,
-    NAME,
+    name,
     inStock,
     description,
     category_id,
@@ -192,7 +194,7 @@ INSERT INTO products(
 
 INSERT INTO products(
     id,
-    NAME,
+    name,
     inStock,
     description,
     category_id,
@@ -221,7 +223,7 @@ INSERT INTO products(
 
 INSERT INTO products(
     id,
-    NAME,
+    name,
     inStock,
     description,
     category_id,
@@ -237,7 +239,7 @@ INSERT INTO products(
 
 INSERT INTO products(
     id,
-    NAME,
+    name,
     inStock,
     description,
     category_id,
@@ -253,7 +255,7 @@ INSERT INTO products(
 
 INSERT INTO products(
     id,
-    NAME,
+    name,
     inStock,
     description,
     category_id,
@@ -280,7 +282,7 @@ INSERT INTO products(
 
 INSERT INTO products(
     id,
-    NAME,
+    name,
     inStock,
     description,
     category_id,
@@ -340,42 +342,42 @@ INSERT INTO galleries(product_id, url) VALUES('apple-airtag', 'https://store.sto
 -- --------------------------------------------------------
 -- Inserting data into `attributes`
 -- --------------------------------------------------------
-INSERT INTO attributes(id, NAME, TYPE) VALUES('Size', 'Size', 'text');
-INSERT INTO attributes(id, NAME, TYPE) VALUES('Color', 'Color', 'swatch');
-INSERT INTO attributes(id, NAME, TYPE) VALUES('Capacity', 'Capacity', 'text');
-INSERT INTO attributes(id, NAME, TYPE) VALUES('With USB 3 ports', 'With USB 3 ports', 'text');
-INSERT INTO attributes(id, NAME, TYPE) VALUES('Touch ID in keyboard', 'Touch ID in keyboard', 'text');
+INSERT INTO attributes(id, name, type) VALUES('Size', 'Size', 'text');
+INSERT INTO attributes(id, name, type) VALUES('Color', 'Color', 'swatch');
+INSERT INTO attributes(id, name, type) VALUES('Capacity', 'Capacity', 'text');
+INSERT INTO attributes(id, name, type) VALUES('With USB 3 ports', 'With USB 3 ports', 'text');
+INSERT INTO attributes(id, name, type) VALUES('Touch ID in keyboard', 'Touch ID in keyboard', 'text');
 
 -- --------------------------------------------------------
 -- Inserting data into `attribute_items`
 -- --------------------------------------------------------
 -- Size attribute items
-INSERT INTO attribute_items(id, attribute_id, displayValue, VALUE) VALUES('40', 'Size', '40', '40');
-INSERT INTO attribute_items(id, attribute_id, displayValue, VALUE) VALUES('41', 'Size', '41', '41');
-INSERT INTO attribute_items(id, attribute_id, displayValue, VALUE) VALUES('42', 'Size', '42', '42');
-INSERT INTO attribute_items(id, attribute_id, displayValue, VALUE) VALUES('43', 'Size', '43', '43');
-INSERT INTO attribute_items(id, attribute_id, displayValue, VALUE) VALUES('Small', 'Size', 'Small', 'S');
-INSERT INTO attribute_items(id, attribute_id, displayValue, VALUE) VALUES('Medium', 'Size', 'Medium', 'M');
-INSERT INTO attribute_items(id, attribute_id, displayValue, VALUE) VALUES('Large', 'Size', 'Large', 'L');
-INSERT INTO attribute_items(id, attribute_id, displayValue, VALUE) VALUES('Extra Large', 'Size', 'Extra Large', 'XL');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('40', 'Size', '40', '40');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('41', 'Size', '41', '41');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('42', 'Size', '42', '42');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('43', 'Size', '43', '43');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('Small', 'Size', 'Small', 'S');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('Medium', 'Size', 'Medium', 'M');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('Large', 'Size', 'Large', 'L');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('Extra Large', 'Size', 'Extra Large', 'XL');
 
 -- Color attribute items
-INSERT INTO attribute_items(id, attribute_id, displayValue, VALUE) VALUES('Green', 'Color', 'Green', '#44FF03');
-INSERT INTO attribute_items(id, attribute_id, displayValue, VALUE) VALUES('Cyan', 'Color', 'Cyan', '#03FFF7');
-INSERT INTO attribute_items(id, attribute_id, displayValue, VALUE) VALUES('Blue', 'Color', 'Blue', '#030BFF');
-INSERT INTO attribute_items(id, attribute_id, displayValue, VALUE) VALUES('Black', 'Color', 'Black', '#000000');
-INSERT INTO attribute_items(id, attribute_id, displayValue, VALUE) VALUES('White', 'Color', 'White', '#FFFFFF');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('Green', 'Color', 'Green', '#44FF03');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('Cyan', 'Color', 'Cyan', '#03FFF7');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('Blue', 'Color', 'Blue', '#030BFF');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('Black', 'Color', 'Black', '#000000');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('White', 'Color', 'White', '#FFFFFF');
 
 -- Capacity attribute items
-INSERT INTO attribute_items(id, attribute_id, displayValue, VALUE) VALUES('512GB', 'Capacity', '512GB', '512GB');
-INSERT INTO attribute_items(id, attribute_id, displayValue, VALUE) VALUES('1T', 'Capacity', '1T', '1T');
-INSERT INTO attribute_items(id, attribute_id, displayValue, VALUE) VALUES('256GB', 'Capacity', '256GB', '256GB');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('512GB', 'Capacity', '512GB', '512GB');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('1T', 'Capacity', '1T', '1T');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('256GB', 'Capacity', '256GB', '256GB');
 
 -- USB and Touch ID attribute items
-INSERT INTO attribute_items(id, attribute_id, displayValue, VALUE) VALUES('Yes', 'With USB 3 ports', 'Yes', 'Yes');
-INSERT INTO attribute_items(id, attribute_id, displayValue, VALUE) VALUES('No', 'With USB 3 ports', 'No', 'No');
-INSERT INTO attribute_items(id, attribute_id, displayValue, VALUE) VALUES('Yes_touch', 'Touch ID in keyboard', 'Yes', 'Yes');
-INSERT INTO attribute_items(id, attribute_id, displayValue, VALUE) VALUES('No_touch', 'Touch ID in keyboard', 'No', 'No');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('Yes_usb_ports', 'With USB 3 ports', 'Yes', 'Yes');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('No_usb_ports', 'With USB 3 ports', 'No', 'No');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('Yes_keyboard_touch', 'Touch ID in keyboard', 'Yes', 'Yes');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('No_keyboard_touch', 'Touch ID in keyboard', 'No', 'No');
 
 -- --------------------------------------------------------
 -- Inserting data into `product_attributes`
@@ -407,51 +409,86 @@ INSERT INTO product_attributes(product_id, attribute_id) VALUES('apple-iphone-12
 -- Inserting data into `product_attribute_items`
 -- --------------------------------------------------------
 -- huarache-x-stussy-le size options
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('huarache-x-stussy-le', '40');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('huarache-x-stussy-le', '41');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('huarache-x-stussy-le', '42');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('huarache-x-stussy-le', '43');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('huarache-x-stussy-le', 'Size', '40');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('huarache-x-stussy-le', 'Size', '41');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('huarache-x-stussy-le', 'Size', '42');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('huarache-x-stussy-le', 'Size', '43');
 
 -- jacket-canada-goosee size options
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('jacket-canada-goosee', 'Small');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('jacket-canada-goosee', 'Medium');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('jacket-canada-goosee', 'Large');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('jacket-canada-goosee', 'Extra Large');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('jacket-canada-goosee', 'Size', 'Small');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('jacket-canada-goosee', 'Size', 'Medium');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('jacket-canada-goosee', 'Size', 'Large');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('jacket-canada-goosee', 'Size', 'Extra Large');
 
 -- ps-5 color and capacity options
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('ps-5', 'Green');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('ps-5', 'Cyan');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('ps-5', 'Blue');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('ps-5', 'Black');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('ps-5', 'White');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('ps-5', '512GB');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('ps-5', '1T');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('ps-5', 'Color', 'Green');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('ps-5', 'Color', 'Cyan');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('ps-5', 'Color', 'Blue');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('ps-5', 'Color', 'Black');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('ps-5', 'Color', 'White');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('ps-5', 'Capacity', '512GB');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('ps-5', 'Capacity', '1T');
 
 -- xbox-series-s color and capacity options
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('xbox-series-s', 'Green');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('xbox-series-s', 'Cyan');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('xbox-series-s', 'Blue');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('xbox-series-s', 'Black');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('xbox-series-s', 'White');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('xbox-series-s', '512GB');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('xbox-series-s', '1T');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('xbox-series-s', 'Color', 'Green');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('xbox-series-s', 'Color', 'Cyan');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('xbox-series-s', 'Color', 'Blue');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('xbox-series-s', 'Color', 'Black');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('xbox-series-s', 'Color', 'White');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('xbox-series-s', 'Capacity', '512GB');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('xbox-series-s', 'Capacity', '1T');
 
 -- apple-imac-2021 capacity, usb, and touchID options
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('apple-imac-2021', '256GB');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('apple-imac-2021', '512GB');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('apple-imac-2021', 'Yes');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('apple-imac-2021', 'No');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('apple-imac-2021', 'Yes_touch');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('apple-imac-2021', 'No_touch');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('apple-imac-2021', 'Capacity', '256GB');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('apple-imac-2021', 'Capacity', '512GB');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('apple-imac-2021', 'With USB 3 ports', 'Yes_usb_ports');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('apple-imac-2021', 'With USB 3 ports', 'No_usb_ports');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('apple-imac-2021', 'Touch ID in keyboard', 'Yes_keyboard_touch');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('apple-imac-2021', 'Touch ID in keyboard', 'No_keyboard_touch');
 
 -- apple-iphone-12-pro capacity and color options
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('apple-iphone-12-pro', '512GB');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('apple-iphone-12-pro', '1T');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('apple-iphone-12-pro', 'Green');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('apple-iphone-12-pro', 'Cyan');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('apple-iphone-12-pro', 'Blue');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('apple-iphone-12-pro', 'Black');
-INSERT INTO product_attribute_items(product_id, attribute_item_id) VALUES('apple-iphone-12-pro', 'White');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('apple-iphone-12-pro', 'Capacity', '512GB');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('apple-iphone-12-pro', 'Capacity', '1T');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('apple-iphone-12-pro', 'Color', 'Green');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('apple-iphone-12-pro', 'Color', 'Cyan');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('apple-iphone-12-pro', 'Color', 'Blue');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('apple-iphone-12-pro', 'Color', 'Black');
+INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
+VALUES('apple-iphone-12-pro', 'Color', 'White');
 
 -- --------------------------------------------------------
 -- Inserting data into `prices`

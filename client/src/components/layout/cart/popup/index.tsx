@@ -6,10 +6,26 @@ import { useTotalCartItems } from "../../../../context/cartItems";
 import { v4 as uuid } from "uuid";
 import { gql, useMutation } from "@apollo/client";
 
+const CREATE_ORDER_MUTATION = gql`
+  mutation CreateOrder($products: [OrderProductInput!]!) {
+    createOrder(products: $products) {
+      id
+    }
+  }
+`;
+interface OrderProductInput {
+  product_id: string;
+  currency_label: string;
+  price: number;
+  quantity: number;
+  attribute_item_ids: string;
+}
+
 type Props = {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 };
+
 const CartPopup = ({ open, setOpen }: Props) => {
   const cartMenuRef = useRef<HTMLDivElement | null>(null);
 
@@ -28,21 +44,11 @@ const CartPopup = ({ open, setOpen }: Props) => {
   );
 
   const [, setLoading] = useState(true);
-  const CREATE_ORDER_MUTATION = gql`
-    mutation {
-      createOrder(
-        product_id: "huarache-x-stussy-le"
-        currency_label: "USD"
-        price: 99.99
-        quantity: 2
-        attribute_item_ids: "1T"
-      ) {
-        id
-      }
-    }
-  `;
 
-  const [createOrder] = useMutation(CREATE_ORDER_MUTATION);
+  const [createOrder] = useMutation<
+    { createOrder: { id: string } },
+    { products: OrderProductInput[] }
+  >(CREATE_ORDER_MUTATION);
 
   const handlePlaceOrder = async (event: MouseEvent<HTMLButtonElement>) => {
     try {
@@ -50,7 +56,20 @@ const CartPopup = ({ open, setOpen }: Props) => {
         event.currentTarget.disabled = true;
         setLoading(true);
 
-        await createOrder();
+        const { data } = await createOrder({
+          variables: {
+            products: selectedCartItems.map(item => ({
+              product_id: item.productId,
+              currency_label: item.currencyLabel,
+              price: item.price,
+              quantity: item.quantity,
+              attribute_item_ids: !item.selectedAttributes
+                ? ""
+                : Object.values(item.selectedAttributes).join(","),
+            })),
+          },
+        });
+        console.log("Order created successfully: ", data);
 
         updateSelectedCartItems([]);
         updateDisplayCartItems([]);

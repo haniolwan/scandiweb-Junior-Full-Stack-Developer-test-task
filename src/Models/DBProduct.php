@@ -134,7 +134,7 @@ class DBProduct extends Product
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if (empty($rows)) {
-            return null; // No product found
+            return null;
         }
 
         $currStmt = $this->db->prepare("
@@ -164,7 +164,7 @@ class DBProduct extends Product
 
         // Fetch Attributes
         $attrStmt = $this->db->prepare("
-        SELECT
+            SELECT
             pa.product_id,
             att.id AS attribute_id,
             att.name AS attribute_name,
@@ -172,9 +172,11 @@ class DBProduct extends Product
             att_items.id AS item_id,
             att_items.value,
             att_items.displayValue
-        FROM product_attributes pa
+            FROM product_attributes pa
         LEFT JOIN attributes att ON pa.attribute_id = att.id
-        LEFT JOIN product_attribute_items pai ON pa.product_id = pai.product_id
+        LEFT JOIN product_attribute_items pai 
+            ON pa.product_id = pai.product_id 
+            AND pa.attribute_id = pai.attribute_id
         LEFT JOIN attribute_items att_items ON pai.attribute_item_id = att_items.id
         WHERE pa.product_id = :id
     ");

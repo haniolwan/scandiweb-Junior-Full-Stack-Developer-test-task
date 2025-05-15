@@ -9,6 +9,7 @@ use App\GraphQL\Types\OrderType;
 use App\GraphQL\Types\ProductType;
 use App\Models\Order;
 use GraphQL\GraphQL as GraphQLBase;
+use GraphQL\Type\Definition\InputObjectType;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Schema;
@@ -47,31 +48,31 @@ class GraphQL
                 ]
             ]);
 
+            $orderProductInput = new InputObjectType([
+                'name' => 'OrderProductInput',
+                'fields' => [
+                    'product_id' => Type::nonNull(Type::string()),
+                    'currency_label' => Type::string(),
+                    'price' => Type::nonNull(Type::float()),
+                    'quantity' => Type::nonNull(Type::int()),
+                    'attribute_item_ids' => Type::nonNull(Type::string()), // or Type::listOf(Type::string())
+                ],
+            ]);
+
             $mutationType = new ObjectType([
                 'name' => 'Mutation',
                 'fields' => [
                     'createOrder' => [
                         'type' => new OrderType(),
                         'args' => [
-                            'product_id' => Type::nonNull(Type::string()),
-                            'currency_label' => Type::nonNull(Type::string()),
-                            'price' => Type::nonNull(Type::float()),
-                            'quantity' => Type::nonNull(Type::int()),
-                            'attribute_item_ids' => Type::nonNull(Type::string()),
+                            'products' => Type::nonNull(Type::listOf(Type::nonNull($orderProductInput))),
                         ],
                         'resolve' => function ($root, $args) {
                             try {
                                 $order = new Order();
-                                $order->product_id = $args['product_id'];
-                                $order->currency_label = $args['currency_label'];
-                                $order->price = $args['price'];
-                                $order->quantity = $args['quantity'];
-                                $order->attribute_item_ids = $args['attribute_item_ids'];
-                                $order->save();
-                                return $order;
+                                return $order->createOrderWithItems($args['products']);
                             } catch (Throwable $e) {
                                 error_log('Error creating order: ' . $e->getMessage());
-                                return null;
                             }
                         }
                     ],
