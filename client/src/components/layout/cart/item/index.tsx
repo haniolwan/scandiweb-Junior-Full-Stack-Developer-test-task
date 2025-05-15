@@ -107,7 +107,7 @@ const Item = ({ cartItem }: Props) => {
               matchingProduct.prices[0].amount}
           </p>
           {/* disable options  */}
-          <div className="pointer-events-none">
+          <div className="pointer-events-none min-w-28">
             {matchingProduct.attributes.map(attr => {
               if (attr.id === "Size") {
                 return (
@@ -133,9 +133,7 @@ const Item = ({ cartItem }: Props) => {
                     </ul>
                   </div>
                 );
-              }
-
-              if (attr.id === "Color") {
+              } else if (attr.id === "Color") {
                 return (
                   <div key={attr.id} data-testid="cart-item-attribute-color">
                     <p className="py-2">{attr.id}:</p>
@@ -159,7 +157,7 @@ const Item = ({ cartItem }: Props) => {
                     </ul>
                   </div>
                 );
-              } else {
+              } else if (attr.id === "Capacity") {
                 return (
                   <div
                     key={attr.id}

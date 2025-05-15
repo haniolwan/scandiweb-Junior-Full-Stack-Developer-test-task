@@ -41,7 +41,7 @@ export const Navigation = () => {
   const { data } = useQuery(CATEGORIES_QUERY);
 
   return (
-    <div className="hidden lg:ml-8 lg:block lg:self-stretch">
+    <div className="lg:ml-8 lg:block lg:self-stretch">
       <div className="flex h-full space-x-8">
         {data?.categories?.map(({ id, name }: Category) => (
           <CategoryNav key={id} category={name} />

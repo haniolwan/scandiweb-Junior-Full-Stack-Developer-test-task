@@ -54,3 +54,11 @@ interface Currency {
   symbol: string; // e.g., "$"
   __typename: string;
 }
+
+export interface OrderProductInput {
+  product_id: string;
+  currency_label: string;
+  price: number;
+  quantity: number;
+  attribute_item_ids: string;
+}

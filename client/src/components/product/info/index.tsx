@@ -9,7 +9,6 @@ type Props = {
   product: Product;
 };
 const Info = ({ product }: Props) => {
-  console.log(product);
   const [selectedAttributes, setSelectedAttributes] = useState(() => {
     return product.attributes.reduce((acc, attr) => {
       acc[attr.id] = "";

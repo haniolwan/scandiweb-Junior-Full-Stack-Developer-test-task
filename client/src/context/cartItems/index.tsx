@@ -2,6 +2,9 @@ import React, { createContext, useState, useContext, ReactNode } from "react";
 import { CartItem, Product } from "../../helpers/types";
 
 interface CartItemsContextType {
+  openCart: boolean;
+  setOpenCart: (open: boolean) => void; // this for open and close cart
+
   displayCartItems: Product[]; // this for display product with choosing different attributes
   updateDisplayCartItems: (products: Product[]) => void;
 
@@ -39,6 +42,8 @@ export const TotalItemsProvider: React.FC<TotalItemsProviderProps> = ({
     }
   });
 
+  const [openCart, setOpenCart] = useState(false);
+
   const updateDisplayCartItems = (items: Product[]) => {
     setDisplayCartItems(items);
     window.localStorage.setItem("cart_display_items", JSON.stringify(items));
@@ -52,6 +57,8 @@ export const TotalItemsProvider: React.FC<TotalItemsProviderProps> = ({
   return (
     <TotalItemsContext.Provider
       value={{
+        openCart,
+        setOpenCart,
         displayCartItems,
         updateDisplayCartItems,
         selectedCartItems,

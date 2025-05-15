@@ -1,10 +1,10 @@
-import { Dispatch, MouseEvent, SetStateAction, useRef, useState } from "react";
+import { MouseEvent, useMemo, useRef, useState } from "react";
 import { CartIcon } from "../../../icons";
 import useOutsideClick from "../../../../hooks/useOutsideClick";
-import Item from "../item";
 import { useTotalCartItems } from "../../../../context/cartItems";
-import { v4 as uuid } from "uuid";
 import { gql, useMutation } from "@apollo/client";
+import CartMenuContent from "../content";
+import { OrderProductInput } from "../../../../helpers/types";
 
 const CREATE_ORDER_MUTATION = gql`
   mutation CreateOrder($products: [OrderProductInput!]!) {
@@ -13,34 +13,32 @@ const CREATE_ORDER_MUTATION = gql`
     }
   }
 `;
-interface OrderProductInput {
-  product_id: string;
-  currency_label: string;
-  price: number;
-  quantity: number;
-  attribute_item_ids: string;
-}
 
-type Props = {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-};
-
-const CartPopup = ({ open, setOpen }: Props) => {
+const CartPopup = () => {
   const cartMenuRef = useRef<HTMLDivElement | null>(null);
 
-  useOutsideClick(cartMenuRef, () => setOpen(false));
-  const { selectedCartItems, updateSelectedCartItems, updateDisplayCartItems } =
-    useTotalCartItems();
+  const {
+    openCart,
+    setOpenCart,
+    selectedCartItems,
+    updateSelectedCartItems,
+    updateDisplayCartItems,
+  } = useTotalCartItems();
 
-  const cartLength = selectedCartItems.reduce(
-    (total, item) => total + item.quantity,
-    0
+  useOutsideClick(cartMenuRef, () => setOpenCart(false));
+
+  const cartLength = useMemo(
+    () => selectedCartItems.reduce((total, item) => total + item.quantity, 0),
+    [selectedCartItems]
   );
 
-  const cartTotal = selectedCartItems.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
+  const cartTotal = useMemo(
+    () =>
+      selectedCartItems.reduce(
+        (total, item) => total + item.price * item.quantity,
+        0
+      ),
+    [selectedCartItems]
   );
 
   const [, setLoading] = useState(true);
@@ -89,12 +87,12 @@ const CartPopup = ({ open, setOpen }: Props) => {
             type="button"
             className="group -m-2 flex items-center p-2 cursor-pointer"
             aria-haspopup="true"
-            aria-expanded={open}
+            aria-expanded={openCart}
             aria-controls="cart-menu"
             aria-label="Shopping cart. 0 items. View bag"
             id="cart-menu-button"
             data-testid="cart-btn"
-            onClick={() => setOpen(!open)}
+            onClick={() => setOpenCart(!openCart)}
           >
             <div className="relative">
               <CartIcon className="text-cart size-6 shrink-0 group-hover:text-gray-500" />
@@ -107,65 +105,14 @@ const CartPopup = ({ open, setOpen }: Props) => {
             <span className="sr-only">items in cart, view bag</span>
           </button>
 
-          {open && (
-            <div
+          {openCart && (
+            <CartMenuContent
               ref={cartMenuRef}
-              id="cart-menu"
-              className="min-w-2xs z-40 absolute right-0 mt-5 w-auto origin-top-right bg-white focus:outline-hidden"
-              role="menu"
-              aria-orientation="vertical"
-              aria-labelledby="cart-menu-button"
-              tabIndex={-1}
-            >
-              <div className="py-8 px-4" role="none">
-                <p className="text-md font-bold">
-                  My Bag,&nbsp;
-                  <span className="text-md font-medium">
-                    {cartLength === 0
-                      ? "Your cart is empty"
-                      : cartLength === 1
-                      ? "1 Item"
-                      : cartLength + " Items"}
-                  </span>
-                </p>
-
-                {cartLength !== 0 && (
-                  <div className="mt-8">
-                    <div className="flow-root">
-                      <ul role="list" className="-my-6">
-                        {selectedCartItems.map(
-                          item =>
-                            item.quantity > 0 && (
-                              <Item key={uuid()} cartItem={item} />
-                            )
-                        )}
-                      </ul>
-                    </div>
-                  </div>
-                )}
-                <div
-                  className="flex justify-between my-5"
-                  aria-label="Cart total"
-                >
-                  <h3 className="text-md font-bold">Total</h3>
-                  <p
-                    className="text-md font-bold"
-                    aria-live="polite"
-                    data-testid="cart-total"
-                  >
-                    ${cartTotal.toFixed(2)}
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  disabled={cartLength === 0}
-                  className="disabled:opacity-40 disabled:pointer-events-none cursor-pointer hover:scale-105 transition uppercase mt-6 flex w-full items-center justify-center border border-transparent bg-primary px-8 py-3 text-base font-medium text-white focus:outline-hidden"
-                  onClick={handlePlaceOrder}
-                >
-                  PLACE ORDER
-                </button>
-              </div>
-            </div>
+              cartLength={cartLength}
+              cartTotal={cartTotal}
+              handlePlaceOrder={handlePlaceOrder}
+              selectedCartItems={selectedCartItems}
+            />
           )}
         </div>
       </div>

@@ -339,6 +339,9 @@ INSERT INTO galleries(product_id, url) VALUES('apple-airpods-pro', 'https://stor
 -- Product: apple-airtag
 INSERT INTO galleries(product_id, url) VALUES('apple-airtag', 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/airtag-double-select-202104?wid=445&hei=370&fmt=jpeg&qlt=95&.v=1617761672000');
 
+-- Product: apple-airtag
+INSERT INTO galleries(product_id, url) VALUES('apple-imac-2021', 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/imac-24-blue-selection-hero-202104?wid=904&hei=840&fmt=jpeg&qlt=80&.v=1617492405000');
+
 -- --------------------------------------------------------
 -- Inserting data into `attributes`
 -- --------------------------------------------------------

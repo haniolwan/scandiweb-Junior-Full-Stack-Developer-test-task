@@ -1,16 +1,18 @@
-import { useEffect, useState } from "react";
-import Sidebar from "./sidebar";
+import {
+  useEffect,
+  //  useState
+} from "react";
+// import Sidebar from "./sidebar";
 import { Navigation } from "./navigation";
 import CartPopup from "./cart/popup";
 import { Logo } from "../icons";
-import { OpenMenuButton } from "./buttons";
+// import { OpenMenuButton } from "./buttons";
 import { Outlet, useLocation } from "react-router";
 import Overlay from "./overlay";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 
 const Layout = () => {
-  const [openSidebar, setOpenSidebar] = useState(false);
-  const [openCart, setOpenCart] = useState(false);
+  // const [openSidebar, setOpenSidebar] = useState(false);
 
   const { pathname } = useLocation();
 
@@ -27,19 +29,18 @@ const Layout = () => {
 
   return (
     <ApolloProvider client={client}>
-      <Overlay open={openCart} />
+      <Overlay />
       <div>
-        <Sidebar open={openSidebar} setOpen={setOpenSidebar} />
+        {/* <Sidebar open={openSidebar} setOpen={setOpenSidebar} /> */}
         <nav aria-label="Top" className="">
           <div
             className="relative flex h-16 items-center !bg-white !z-40
-          px-4 sm:px-6 lg:px-8
-          "
+          px-4 sm:px-6 lg:px-8"
           >
-            <OpenMenuButton setOpen={setOpenSidebar} />
+            {/* <OpenMenuButton setOpen={setOpenSidebar} /> */}
             <Navigation />
             <Logo />
-            <CartPopup open={openCart} setOpen={setOpenCart} />
+            <CartPopup />
           </div>
           <Outlet />
         </nav>
