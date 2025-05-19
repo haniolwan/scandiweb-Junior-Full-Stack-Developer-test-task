@@ -9,14 +9,8 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install PHP extensions using the docker-php-ext-install helper
+# Install PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql zip
-
-# Verify PDO MySQL extension is installed
-RUN php -m | grep pdo
-
-# Copy Apache config (must exist in build context)
-COPY apache.conf /etc/apache2/sites-available/000-default.conf
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
@@ -24,19 +18,16 @@ RUN a2enmod rewrite
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy app files
-COPY . /var/www/html
-
-# Install Composer
+# Install Composer globally
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Install dependencies
-RUN composer install --no-dev --optimize-autoloader
+# Optionally copy and install dependencies (if composer.json exists in ./src)
+COPY ./src/composer.json ./src/composer.lock* /var/www/html/
+RUN if [ -f composer.json ]; then composer install --no-dev --optimize-autoloader; fi
 
 # Fix permissions
 RUN chown -R www-data:www-data /var/www/html
 
 EXPOSE 80
 
-# Define command to start Apache
 CMD ["apache2-foreground"]
