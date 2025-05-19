@@ -1,22 +1,18 @@
 version: "3.8"
 
 services:
-  # Apache + PHP service
   www:
     image: php:apache
     volumes:
       - .:/var/www/html
-    # - ./vendor:/var/www/html/vendor
-    # - ./composer.json:/var/www/html/composer.json # Syncs current project directory with Apache root directory in container
     ports:
       - "80:80"
-      - "443:443"
     networks:
       - app-network
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
 
-  # MySQL Database service
   mysql:
     image: mysql:latest
     ports:
@@ -26,12 +22,17 @@ services:
       - MYSQL_USER=db_user
       - MYSQL_PASSWORD=password
       - MYSQL_ROOT_PASSWORD=password
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./db:/docker-entrypoint-initdb.d
     networks:
       - app-network
-    volumes:
-      - "./db:/docker-entrypoint-initdb.d" # Generates the files for seeding db
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
 
-  # phpMyAdmin for managing MySQL
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     ports:
@@ -42,7 +43,9 @@ services:
     networks:
       - app-network
 
-# Network configuration for service communication
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  mysql_data: # Add this volume definition
