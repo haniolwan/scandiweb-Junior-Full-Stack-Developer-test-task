@@ -7,8 +7,10 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     git \
     curl \
-    && docker-php-ext-install pdo pdo_mysql zip
-
+    default-libmysqlclient-dev \
+    && docker-php-ext-install pdo pdo_mysql zip \
+    && rm -rf /var/lib/apt/lists/*
+    
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
