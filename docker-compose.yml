@@ -3,13 +3,15 @@ version: "3.8"
 services:
   # Apache + PHP service
   www:
-    image: php:apache
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
       - APACHE_SERVER_NAME=localhost
     volumes:
-      - .:/var/www/html
-    # - ./vendor:/var/www/html/vendor
-    # - ./composer.json:/var/www/html/composer.json # Syncs current project directory with Apache root directory in container
+      - ./src:/var/www/html/src # Mount only your source code directory
+      - ./public:/var/www/html/public # Mount public files
+      # Don't mount system directories like vendor, extensions, etc.
     ports:
       - "80:80"
       - "443:443"
