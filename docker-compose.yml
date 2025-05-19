@@ -4,6 +4,8 @@ services:
   # Apache + PHP service
   www:
     image: php:apache
+    environment:
+      - APACHE_SERVER_NAME=localhost
     volumes:
       - .:/var/www/html
     # - ./vendor:/var/www/html/vendor

@@ -5,11 +5,27 @@ RUN apt-get update && apt-get install -y \
     unzip \
     zip \
     libzip-dev \
-    git \
-    curl \
+    libpq-dev \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    libwebp-dev \
+    libxml2-dev \
+    libonig-dev \
     libmysqlclient-dev \ 
-    && docker-php-ext-install pdo pdo_mysql zip \
-    && rm -rf /var/lib/apt/lists/*
+    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+    && docker-php-ext-install -j$(nproc) \
+        pdo \
+        pdo_mysql \      
+        zip \
+        gd \
+        exif \
+        pcntl \
+        bcmath
+
+# Enable Apache modules and other configurations
+RUN a2enmod rewrite
+COPY apache.conf /etc/apache2/sites-available/000-default.conf
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
