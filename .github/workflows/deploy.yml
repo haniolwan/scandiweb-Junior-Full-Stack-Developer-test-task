@@ -30,7 +30,4 @@ jobs:
             # Write .env content from secret
             echo "${{ secrets.ENV_FILE }}" > .env
 
-            # Restart Docker
-            docker compose down
-            docker compose up -d --build
           EOF
