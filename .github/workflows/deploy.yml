@@ -3,7 +3,7 @@ name: Deploy to EC2
 on:
   push:
     branches:
-      - main # or your deploy branch
+      - main
 
 jobs:
   deploy:
@@ -19,11 +19,18 @@ jobs:
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-      - name: Deploy on EC2
+      - name: Deploy to EC2 and inject .env
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@3.83.213.206 << 'EOF'
             cd /home/ubuntu/scandiweb-Junior-Full-Stack-Developer-test-task
+
+            # Make sure repo is up to date
             git pull origin main
-            docker-compose down
-            docker-compose up -d --build
+
+            # Write .env content from secret
+            echo "${{ secrets.ENV_FILE }}" > .env
+
+            # Restart Docker
+            docker compose down
+            docker compose up -d --build
           EOF
