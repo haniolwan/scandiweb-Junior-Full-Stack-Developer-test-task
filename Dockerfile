@@ -7,18 +7,19 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     git \
     curl \
-    libmysqlclient-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Install PHP extensions - separate command for better visibility
-RUN docker-php-ext-install pdo pdo_mysql
-RUN docker-php-ext-install zip
+# Install PHP extensions using the docker-php-ext-install helper
+RUN docker-php-ext-install pdo pdo_mysql zip
 
 # Verify PDO MySQL extension is installed
 RUN php -m | grep pdo
 
-# Copy Apache config
+# Copy Apache config (must exist in build context)
 COPY apache.conf /etc/apache2/sites-available/000-default.conf
+
+# Enable Apache mod_rewrite
+RUN a2enmod rewrite
 
 # Set working directory
 WORKDIR /var/www/html
@@ -35,10 +36,7 @@ RUN composer install --no-dev --optimize-autoloader
 # Fix permissions
 RUN chown -R www-data:www-data /var/www/html
 
-# Enable Apache mod_rewrite
-RUN a2enmod rewrite
-
-# Create a custom php.ini to ensure extensions are enabled
-RUN echo "extension=pdo_mysql.so" > /usr/local/etc/php/conf.d/docker-php-ext-pdo_mysql.ini
-
 EXPOSE 80
+
+# Define command to start Apache
+CMD ["apache2-foreground"]

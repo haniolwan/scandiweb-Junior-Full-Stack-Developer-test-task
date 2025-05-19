@@ -6,12 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    environment:
-      - APACHE_SERVER_NAME=localhost
-    volumes:
-      - ./src:/var/www/html/src # Mount only your source code directory
-      - ./public:/var/www/html/public # Mount public files
-      # Don't mount system directories like vendor, extensions, etc.
+    container_name: php-app
     ports:
       - "80:80"
       - "443:443"
@@ -19,10 +14,16 @@ services:
       - app-network
     depends_on:
       - mysql
+    # For development, you might want selective mounting to preserve installed extensions
+    # volumes:
+    #   - ./src:/var/www/html/src
+    #   - ./public:/var/www/html/public
+    #   - ./index.php:/var/www/html/index.php
 
   # MySQL Database service
   mysql:
     image: mysql:latest
+    container_name: mysql-db
     ports:
       - "3306:3306"
     environment:
@@ -33,11 +34,13 @@ services:
     networks:
       - app-network
     volumes:
-      - "./db:/docker-entrypoint-initdb.d" # Generates the files for seeding db
+      - "./db:/docker-entrypoint-initdb.d" # For DB initialization scripts
+      - mysql-data:/var/lib/mysql # Persistent data storage
 
   # phpMyAdmin for managing MySQL
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
     ports:
       - "8001:80"
     environment:
@@ -45,8 +48,14 @@ services:
       - PMA_PORT=3306
     networks:
       - app-network
+    depends_on:
+      - mysql
 
 # Network configuration for service communication
 networks:
   app-network:
     driver: bridge
+
+# Persistent volumes
+volumes:
+  mysql-data:
