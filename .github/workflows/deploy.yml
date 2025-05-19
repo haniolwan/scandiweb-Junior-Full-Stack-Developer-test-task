@@ -19,15 +19,16 @@ jobs:
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-      - name: Deploy to EC2 and inject .env
+      - name: Deploy to EC2 and setup DB
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@3.83.213.206 << 'EOF'
             cd /home/ubuntu/scandiweb-Junior-Full-Stack-Developer-test-task
 
-            # Make sure repo is up to date
             git pull origin main
 
-            # Write .env content from secret
             echo "${{ secrets.ENV_FILE }}" > .env
 
+            mysql -u root -p'root' -e "DROP DATABASE IF EXISTS scandiweb; CREATE DATABASE scandiweb;"
+
+            mysql -u root -p'root' scandiweb < /home/ubuntu/scandiweb.sql
           EOF

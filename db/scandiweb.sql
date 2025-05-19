@@ -1,5 +1,11 @@
 -- Database schema for e-commerce application
 
+SET FOREIGN_KEY_CHECKS = 0;
+DROP DATABASE IF EXISTS scandiweb;
+CREATE DATABASE scandiweb;
+USE scandiweb;
+SET FOREIGN_KEY_CHECKS = 1;
+
 -- --------------------------------------------------------
 -- Table structure for table `categories`
 -- --------------------------------------------------------
