@@ -22,7 +22,7 @@ jobs:
       - name: Deploy on EC2
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@3.83.213.206 << 'EOF'
-            cd /home/ubuntu/scandiweb
+            cd /home/ubuntu/scandiweb-Junior-Full-Stack-Developer-test-task
             git pull origin main
             docker-compose down
             docker-compose up -d --build
