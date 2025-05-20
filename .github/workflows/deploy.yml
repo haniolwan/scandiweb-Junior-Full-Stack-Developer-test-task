@@ -25,15 +25,11 @@ jobs:
 
       - name: Deploy to EC2 and import SQL
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@3.83.213.206 << EOF
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@3.83.213.206 DB_USER="${{ secrets.DB_USER }}" DB_PASSWORD="${{ secrets.DB_PASSWORD }}" DB_NAME="${{ secrets.DB_NAME }}" DB_HOST="${{ secrets.DB_HOST }}" DB_PORT="${{ secrets.DB_PORT }}" << EOF
             cd /home/ubuntu/scandiweb-Junior-Full-Stack-Developer-test-task
             git pull origin main
 
-            echo "${{ secrets.ENV_FILE }}" > .env
+            mysql -u "$DB_USER" -p"$DB_PASSWORD" -h "$DB_HOST" -P "$DB_PORT" -e "DROP DATABASE IF EXISTS \\\`$DB_NAME\\\`; CREATE DATABASE \\\`$DB_NAME\\\`;"
 
-            # Drop and recreate DB
-            mysql -u "${{ secrets.DB_USER }}" -p"${{ secrets.DB_PASSWORD }}" -e "DROP DATABASE IF EXISTS \\\`${{ secrets.DB_NAME }}\\\`; CREATE DATABASE \\\`${{ secrets.DB_NAME }}\\\`;"
-
-            # Import SQL file
-            mysql -u "${{ secrets.DB_USER }}" -p"${{ secrets.DB_PASSWORD }}" "${{ secrets.DB_NAME }}" < /home/ubuntu/scandiweb.sql
+            mysql -u "$DB_USER" -p"$DB_PASSWORD" -h "$DB_HOST" -P "$DB_PORT" "$DB_NAME" < /home/ubuntu/scandiweb.sql
           EOF
