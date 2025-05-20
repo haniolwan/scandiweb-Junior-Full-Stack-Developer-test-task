@@ -23,16 +23,17 @@ jobs:
         run: |
           scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa db/scandiweb.sql ubuntu@3.83.213.206:/home/ubuntu/scandiweb.sql
 
-      - name: Deploy to EC2 and setup DB
+      - name: Deploy to EC2 and import SQL
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@3.83.213.206 << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@3.83.213.206 << EOF
             cd /home/ubuntu/scandiweb-Junior-Full-Stack-Developer-test-task
-
             git pull origin main
 
             echo "${{ secrets.ENV_FILE }}" > .env
 
-            mysql -u root -p'root' -e "DROP DATABASE IF EXISTS scandiweb; CREATE DATABASE scandiweb;"
+            # Drop and recreate DB
+            mysql -u "${{ secrets.DB_USER }}" -p"${{ secrets.DB_PASSWORD }}" -e "DROP DATABASE IF EXISTS \\\`${{ secrets.DB_NAME }}\\\`; CREATE DATABASE \\\`${{ secrets.DB_NAME }}\\\`;"
 
-            mysql -u root -p'root' scandiweb < /home/ubuntu/scandiweb.sql
+            # Import SQL file
+            mysql -u "${{ secrets.DB_USER }}" -p"${{ secrets.DB_PASSWORD }}" "${{ secrets.DB_NAME }}" < /home/ubuntu/scandiweb.sql
           EOF
