@@ -31,7 +31,7 @@ jobs:
           cd /var/www/scandiweb
 
           # Pull latest code
-          git pull origin main
+          sudo git pull origin main
 
           # Re-import the SQL file
           mysql -u "$DB_USER" -p"$DB_PASSWORD" -h "$DB_HOST" -P "$DB_PORT" "$DB_NAME" < db/scandiweb.sql
