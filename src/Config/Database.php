@@ -14,11 +14,12 @@ class Database
             $dotenv = Dotenv::createImmutable(__DIR__ . '/../..');
             $dotenv->load();
 
-            $host = $_ENV['DB_HOST'];
-            $dbname = $_ENV['DB_NAME'];
-            $username = $_ENV['DB_USER'];
-            $password = $_ENV['DB_PASSWORD'];
-            $port = $_ENV['DB_PORT'];
+            // Should be hidden for testing purposes only
+            $host = $_ENV['DB_HOST'] ?? 'localhost';
+            $dbname = $_ENV['DB_NAME'] ?? 'scandiweb';
+            $username = $_ENV['DB_USER'] ?? 'root';
+            $password = $_ENV['DB_PASSWORD'] ?? 'StrongP@ssw0rd!';
+            $port = $_ENV['DB_PORT'] ?? '3306';
 
             $pdo = new PDO("mysql:host={$host};port={$port};dbname={$dbname}", $username, $password);
             return $pdo;
