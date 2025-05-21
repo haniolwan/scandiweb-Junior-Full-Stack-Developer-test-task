@@ -11,7 +11,7 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     $r->post('/graphql', [\App\Controllers\GraphQL::class, 'handle']);
     $r->get('/db-test', function () {
         try {
-            $dotenv = Dotenv::createImmutable(__DIR__ . '/../..');
+            $dotenv = Dotenv::createImmutable(__DIR__);
             $dotenv->load();
 
             $host = $_ENV['DB_HOST'];
