@@ -13,7 +13,8 @@ export const CategoryNav = ({ category }: { category: string }) => {
         "border-b border-primary": isActive,
       })}
     >
-      <button
+      <a
+        href={`/${category}`}
         type="button"
         className={classNames(
           "cursor-pointer capitalize relative z-10 -mb-px flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-gray-700 transition-colors duration-200 ease-out hover:text-primary",
@@ -24,7 +25,7 @@ export const CategoryNav = ({ category }: { category: string }) => {
         data-testid={isActive ? "active-category-link" : "category-link"}
       >
         {category}
-      </button>
+      </a>
     </div>
   );
 };
