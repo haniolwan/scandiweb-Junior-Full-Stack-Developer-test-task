@@ -8,6 +8,7 @@ use App\GraphQL\Types\CategoryType;
 use App\GraphQL\Types\OrderType;
 use App\GraphQL\Types\ProductType;
 use App\Models\Order;
+use GraphQL\Error\DebugFlag;
 use GraphQL\GraphQL as GraphQLBase;
 use GraphQL\Type\Definition\InputObjectType;
 use GraphQL\Type\Definition\ObjectType;
@@ -115,7 +116,7 @@ class GraphQL
             $variableValues = $input['variables'] ?? null;
 
             $result = GraphQLBase::executeQuery($schema, $query, null, null, $variableValues);
-            $output = $result->toArray();
+            $output = $result->toArray(DebugFlag::INCLUDE_DEBUG_MESSAGE | DebugFlag::INCLUDE_TRACE);
 
             if (isset($output['errors'])) {
                 error_log(print_r($output['errors'], true));
@@ -124,6 +125,7 @@ class GraphQL
             $output = [
                 'error' => [
                     'message' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
                 ],
             ];
         }
