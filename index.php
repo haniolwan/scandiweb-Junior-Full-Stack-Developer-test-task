@@ -1,5 +1,7 @@
 <?php
 
+use Dotenv\Dotenv;
+
 require __DIR__ . '/vendor/autoload.php';
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
@@ -9,13 +11,16 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     $r->post('/graphql', [\App\Controllers\GraphQL::class, 'handle']);
     $r->get('/db-test', function () {
         try {
-            // Adjust this to match your DB connection logic
-            $pdo = new PDO(
-                'mysql:host=' . getenv('DB_HOST') . ';dbname=' . getenv('DB_NAME') . ';port=' . getenv('DB_PORT'),
-                getenv('DB_USER'),
-                getenv('DB_PASSWORD')
-            );
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $dotenv = Dotenv::createImmutable(__DIR__ . '/../..');
+            $dotenv->load();
+
+            $host = $_ENV['DB_HOST'];
+            $dbname = $_ENV['DB_NAME'];
+            $username = $_ENV['DB_USER'];
+            $password = $_ENV['DB_PASSWORD'];
+            $port = $_ENV['DB_PORT'];
+
+            $pdo = new PDO("mysql:host={$host};port={$port};dbname={$dbname}", $username, $password);
             $stmt = $pdo->query('SELECT 1');
             $result = $stmt->fetch();
             header('Content-Type: application/json');
