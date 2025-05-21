@@ -31,18 +31,28 @@ class GraphQL
                             'id' => Type::string(), // optional
                         ],
                         'resolve' => function ($root, $args) {
-                            if (isset($args['id'])) {
-                                $product = ProductQuery::find($args['id']);
-                                return $product ? [$product] : [];
-                            } else {
-                                return ProductQuery::get();
+                            try {
+                                if (isset($args['id'])) {
+                                    $product = ProductQuery::find($args['id']);
+                                    return $product ? [$product] : [];
+                                } else {
+                                    return ProductQuery::get();
+                                }
+                            } catch (Throwable $e) {
+                                error_log('Error fetching products: ' . $e->getMessage());
+                                return [];
                             }
                         }
                     ],
                     'categories' => [
                         'type' => Type::listOf(new CategoryType()),
                         'resolve' => function () {
-                            return CategoryQuery::get();
+                            try {
+                                return CategoryQuery::get();
+                            } catch (Throwable $e) {
+                                error_log('Error fetching categories: ' . $e->getMessage());
+                                return [];
+                            }
                         }
                     ]
                 ]

@@ -21,6 +21,7 @@ class Database
             $port = $_ENV['DB_PORT'];
 
             $pdo = new PDO("mysql:host={$host};port={$port};dbname={$dbname}", $username, $password);
+            print_r($pdo);
             return $pdo;
         } catch (PDOException $e) {
             die("Connection failed: " . $e->getMessage());
