@@ -10,6 +10,7 @@ const Overlay = () => {
         { "opacity-100": openCart, "opacity-0 pointer-events-none": !openCart }
       )}
       aria-hidden="true"
+      data-testid="cart-overlay"
     />
   );
 };
