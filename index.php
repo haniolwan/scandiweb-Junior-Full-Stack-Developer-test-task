@@ -7,6 +7,24 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     header("Access-Control-Allow-Headers: Content-Type, Authorization");
     header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
     $r->post('/graphql', [\App\Controllers\GraphQL::class, 'handle']);
+    $r->get('/db-test', function () {
+        try {
+            // Adjust this to match your DB connection logic
+            $pdo = new PDO(
+                'mysql:host=' . getenv('DB_HOST') . ';dbname=' . getenv('DB_NAME') . ';port=' . getenv('DB_PORT'),
+                getenv('DB_USER'),
+                getenv('DB_PASSWORD')
+            );
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $stmt = $pdo->query('SELECT 1');
+            $result = $stmt->fetch();
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true, 'result' => $result]);
+        } catch (Exception $e) {
+            header('Content-Type: application/json', true, 500);
+            echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+        }
+    });
 });
 
 ini_set('display_errors', 0);
