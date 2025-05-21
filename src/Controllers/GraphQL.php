@@ -50,8 +50,8 @@ class GraphQL
                             try {
                                 return CategoryQuery::get();
                             } catch (Throwable $e) {
-                                error_log('Error fetching categories: ' . $e->getMessage());
-                                return [];
+                                return ('Error fetching categories: ' . $e->getMessage());
+                                // return [];
                             }
                         }
                     ]
