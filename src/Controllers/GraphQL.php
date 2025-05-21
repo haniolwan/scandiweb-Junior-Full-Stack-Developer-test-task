@@ -40,8 +40,7 @@ class GraphQL
                                     return ProductQuery::get();
                                 }
                             } catch (Throwable $e) {
-                                error_log('Error fetching products: ' . $e->getMessage());
-                                return [];
+                                return $e;
                             }
                         }
                     ],
