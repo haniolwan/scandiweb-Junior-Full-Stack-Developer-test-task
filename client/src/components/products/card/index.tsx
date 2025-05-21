@@ -65,6 +65,7 @@ const Card = memo(({ product }: Props) => {
         selectedAttributes,
         quantity: 1,
         price: product.prices[0].amount,
+        currencyLabel: product.prices[0].currency.label,
       });
     }
 
