@@ -207,13 +207,13 @@ INSERT INTO products(
     brand
 ) VALUES(
     'xbox-series-s',
-    'Xbox Series S 512GB',
+    'Xbox Series S 512G',
     FALSE,
     '<div>
     <ul>
         <li><span>Hardware-beschleunigtes Raytracing macht dein Spiel noch realistischer</span></li>
         <li><span>Spiele Games mit bis zu 120 Bilder pro Sekunde</span></li>
-        <li><span>Minimiere Ladezeiten mit einer speziell entwickelten 512GB NVMe SSD und wechsle mit Quick Resume nahtlos zwischen mehreren Spielen.</span></li>
+        <li><span>Minimiere Ladezeiten mit einer speziell entwickelten 512G NVMe SSD und wechsle mit Quick Resume nahtlos zwischen mehreren Spielen.</span></li>
         <li><span>Xbox Smart Delivery stellt sicher, dass du die beste Version deines Spiels spielst, egal, auf welcher Konsole du spielst</span></li>
         <li><span>Spiele deine Xbox One-Spiele auf deiner Xbox Series S weiter. Deine Fortschritte, Erfolge und Freundesliste werden automatisch auf das neue System übertragen.</span></li>
         <li><span>Erwecke deine Spiele und Filme mit innovativem 3D Raumklang zum Leben</span></li>
@@ -378,7 +378,7 @@ INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('Black
 INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('White', 'Color', 'White', '#FFFFFF');
 
 -- Capacity attribute items
-INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('512GB', 'Capacity', '512GB', '512GB');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('512G', 'Capacity', '512G', '512G');
 INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('1T', 'Capacity', '1T', '1T');
 INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('256GB', 'Capacity', '256GB', '256GB');
 
@@ -449,7 +449,7 @@ VALUES('ps-5', 'Color', 'Black');
 INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
 VALUES('ps-5', 'Color', 'White');
 INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
-VALUES('ps-5', 'Capacity', '512GB');
+VALUES('ps-5', 'Capacity', '512G');
 INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
 VALUES('ps-5', 'Capacity', '1T');
 
@@ -465,7 +465,7 @@ VALUES('xbox-series-s', 'Color', 'Black');
 INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
 VALUES('xbox-series-s', 'Color', 'White');
 INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
-VALUES('xbox-series-s', 'Capacity', '512GB');
+VALUES('xbox-series-s', 'Capacity', '512G');
 INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
 VALUES('xbox-series-s', 'Capacity', '1T');
 
@@ -473,7 +473,7 @@ VALUES('xbox-series-s', 'Capacity', '1T');
 INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
 VALUES('apple-imac-2021', 'Capacity', '256GB');
 INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
-VALUES('apple-imac-2021', 'Capacity', '512GB');
+VALUES('apple-imac-2021', 'Capacity', '512G');
 INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
 VALUES('apple-imac-2021', 'With USB 3 ports', 'Yes_usb_ports');
 INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
@@ -485,7 +485,7 @@ VALUES('apple-imac-2021', 'Touch ID in keyboard', 'No_keyboard_touch');
 
 -- apple-iphone-12-pro capacity and color options
 INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
-VALUES('apple-iphone-12-pro', 'Capacity', '512GB');
+VALUES('apple-iphone-12-pro', 'Capacity', '512G');
 INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
 VALUES('apple-iphone-12-pro', 'Capacity', '1T');
 INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
@@ -551,6 +551,6 @@ INSERT INTO `order_items` (
     'USD',
     1000.76,
     2,
-    'Blue, 512GB',
+    'Blue, 512G',
     '2025-05-14 12:02:56'
 );

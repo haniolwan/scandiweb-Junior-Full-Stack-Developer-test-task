@@ -54,6 +54,7 @@ const ToggleSize = ({
   setSelectedSize: (Id: string, value: string) => void;
   dataSet?: string;
 }) => {
+  console.log(dataSet);
   const isSelected = size === selectedSize;
 
   return (

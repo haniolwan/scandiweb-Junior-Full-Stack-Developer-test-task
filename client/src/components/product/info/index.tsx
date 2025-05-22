@@ -92,6 +92,7 @@ const Info = ({ product }: Props) => {
       .replace(/([a-z])([A-Z])/g, "$1-$2")
       .replace(/\s+/g, "-")
       .toLowerCase();
+
   return (
     <div>
       <div>
@@ -101,12 +102,11 @@ const Info = ({ product }: Props) => {
         <div className="mt-2">
           <div>
             {product.attributes.map(attr => {
+              console.log(`product-attribute-${toKebabCase(attr.id)}`);
+
               if (attr.id === "Size") {
                 return (
-                  <div
-                    key={attr.id}
-                    data-testid={`product-attribute-${toKebabCase(attr.id)}`}
-                  >
+                  <div key={attr.id} data-testid="product-attribute-size">
                     <h3 className="text-md pb-2 pt-4 font-bold uppercase">
                       {attr.id}:
                     </h3>
@@ -120,6 +120,9 @@ const Info = ({ product }: Props) => {
                             size={size.value}
                             selectedSize={selectedAttributes[attr.id]}
                             setSelectedSize={handleItemSelect}
+                            dataSet={`product-attribute-${toKebabCase(
+                              attr.id
+                            )}-${size.value}`}
                           />
                         ))}
                     </ul>
@@ -128,7 +131,7 @@ const Info = ({ product }: Props) => {
               }
               if (attr.id === "Color") {
                 return (
-                  <div key={attr.id}>
+                  <div key={attr.id} data-testid="product-attribute-color">
                     <h3 className="text-md pb-2 pt-4 font-bold uppercase">
                       {attr.id}:
                     </h3>
@@ -149,7 +152,10 @@ const Info = ({ product }: Props) => {
                 );
               } else {
                 return (
-                  <div key={attr.id}>
+                  <div
+                    key={attr.id}
+                    data-testid={`product-attribute-${toKebabCase(attr.id)}`}
+                  >
                     <div className="flex items-center justify-between">
                       <h3 className="text-md pb-2 pt-4 font-bold uppercase">
                         {attr.id}:
