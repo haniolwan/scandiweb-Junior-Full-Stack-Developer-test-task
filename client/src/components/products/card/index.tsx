@@ -73,10 +73,7 @@ const Card = memo(({ product }: Props) => {
   };
 
   const toKebabCase = (str: string) =>
-    str
-      .replace(/([a-z])([A-Z])/g, "$1-$2")
-      .replace(/\s+/g, "-")
-      .toLowerCase();
+    str.trim().replace(/\s+/g, "-").toLowerCase();
 
   return (
     <div
@@ -84,7 +81,7 @@ const Card = memo(({ product }: Props) => {
         "w-80 md:w-full relative group cursor-pointer p-2 transition-transform duration-300 hover:scale-105 hover:shadow-[var(--shadow-product)]",
         { "opacity-60": !product.inStock }
       )}
-      data-testid={`product-${toKebabCase(product.id)}`}
+      data-testid={`product-${toKebabCase(product.name)}`}
     >
       {product.inStock && (
         <button
