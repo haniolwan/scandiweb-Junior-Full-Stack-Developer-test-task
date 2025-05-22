@@ -29,10 +29,11 @@ const Layout = () => {
 
   return (
     <ApolloProvider client={client}>
-      <Overlay />
       <div>
         {/* <Sidebar open={openSidebar} setOpen={setOpenSidebar} /> */}
         <nav aria-label="Top" className="">
+          <Overlay />
+
           <div
             className="relative flex h-16 items-center !bg-white !z-40
           px-4 sm:px-6 lg:px-8"
