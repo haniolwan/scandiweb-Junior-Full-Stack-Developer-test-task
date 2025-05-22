@@ -145,6 +145,9 @@ const Info = ({ product }: Props) => {
                             color={color.value}
                             selectedColor={selectedAttributes[attr.id]}
                             setSelectedColor={handleItemSelect}
+                            dataSet={`product-attribute-${toKebabCase(
+                              attr.id
+                            )}-${color.value}`}
                           />
                         ))}
                     </ul>
@@ -178,6 +181,9 @@ const Info = ({ product }: Props) => {
                               onClick={() =>
                                 handleItemSelect(attr.id, item.value)
                               }
+                              data-testid={`product-attribute-${toKebabCase(
+                                attr.id
+                              )}-${item.value}`}
                             >
                               <input
                                 type="radio"
