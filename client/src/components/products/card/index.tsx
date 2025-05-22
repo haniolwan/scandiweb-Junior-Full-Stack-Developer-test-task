@@ -21,6 +21,8 @@ const Card = memo(({ product }: Props) => {
     updateSelectedCartItems,
   } = useTotalCartItems();
 
+  const { setOpenCart } = useTotalCartItems();
+
   const handleAddItemToCart = () => {
     const isInDisplayCart = displayCartItems.some(
       item => item.id === product.id
@@ -85,7 +87,10 @@ const Card = memo(({ product }: Props) => {
     >
       {product.inStock && (
         <button
-          onClick={handleAddItemToCart}
+          onClick={() => {
+            handleAddItemToCart();
+            setOpenCart(true);
+          }}
           className="cursor-pointer hover:scale-105 opacity-0 group-hover:opacity-100 absolute bottom-14 right-6 bg-green-500 text-white p-2 rounded-full shadow-md z-10 transition-opacity duration-300"
         >
           <CartIcon className="text-white" width="20" height="20" />
