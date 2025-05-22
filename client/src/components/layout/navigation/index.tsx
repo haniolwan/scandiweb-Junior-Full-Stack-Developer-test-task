@@ -12,6 +12,7 @@ export const CategoryNav = ({ category }: { category: string }) => {
       className={classNames("hover:border-b border-primary relative flex", {
         "border-b border-primary": isActive,
       })}
+      data-testid={isActive ? "active-category-link" : "category-link"}
     >
       <a
         href={`/${category}`}
@@ -21,7 +22,10 @@ export const CategoryNav = ({ category }: { category: string }) => {
           { "text-primary ": isActive }
         )}
         aria-expanded="false"
-        onClick={() => updatedFilters(category)}
+        onClick={e => {
+          e.preventDefault();
+          updatedFilters(category);
+        }}
         data-testid={isActive ? "active-category-link" : "category-link"}
       >
         {category}

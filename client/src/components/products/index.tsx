@@ -46,12 +46,15 @@ const Products = () => {
     variables: { id },
   });
 
+  const filterProperty = filter === "all" ? null : filter;
+
   const products = useMemo(() => {
     if (!data?.products) return [];
-    return data.products.filter((product: Product) =>
-      filter === "" || filter === "all" ? true : product.category === filter
+    return data.products.filter(
+      (product: Product) =>
+        !filterProperty || product.category === filterProperty
     );
-  }, [data, filter]); // filter products by category stored in context
+  }, [data, filter]);
 
   return (
     !loading && (
