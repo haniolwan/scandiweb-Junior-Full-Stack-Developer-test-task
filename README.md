@@ -116,4 +116,4 @@ project-root/
 
 ## Passed Test Cases
 
-![Test Results](https://ibb.co/GfYTfBwc)
+<img src="https://ibb.co/GfYTfBwc"/>
