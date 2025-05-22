@@ -93,6 +93,8 @@ const Info = ({ product }: Props) => {
       .replace(/\s+/g, "-")
       .toLowerCase();
 
+  const { setOpenCart } = useTotalCartItems();
+
   return (
     <div>
       <div>
@@ -219,7 +221,10 @@ const Info = ({ product }: Props) => {
               disabled={isDisabled}
               type="button"
               className="disabled:opacity-40 disabled:pointer-events-none cursor-pointer hover:scale-105 transition uppercase mt-10 flex w-full items-center justify-center border border-transparent bg-primary px-8 py-3 text-base font-medium text-white focus:outline-hidden"
-              onClick={handleAddItemToCart}
+              onClick={() => {
+                handleAddItemToCart();
+                setOpenCart(true);
+              }}
               data-testid="add-to-cart"
             >
               Add to cart

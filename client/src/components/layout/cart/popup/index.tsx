@@ -1,6 +1,6 @@
 import { MouseEvent, useMemo, useRef, useState } from "react";
 import { CartIcon } from "../../../icons";
-import useOutsideClick from "../../../../hooks/useOutsideClick";
+// import useOutsideClick from "../../../../hooks/useOutsideClick";
 import { useTotalCartItems } from "../../../../context/cartItems";
 import { gql, useMutation } from "@apollo/client";
 import CartMenuContent from "../content";
@@ -25,7 +25,7 @@ const CartPopup = () => {
     updateDisplayCartItems,
   } = useTotalCartItems();
 
-  useOutsideClick(cartMenuRef, () => setOpenCart(false));
+  // useOutsideClick(cartMenuRef, () => setOpenCart(false));
 
   const cartLength = useMemo(
     () => selectedCartItems.reduce((total, item) => total + item.quantity, 0),
