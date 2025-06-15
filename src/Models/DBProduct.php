@@ -140,9 +140,6 @@ class DBProduct extends Product
         if (empty($rows)) {
             return null;
         }
-        if (empty($row[0]['id'])) {
-            continue;
-        }
 
         $productId = $rows[0]['id'];
         $product = [
@@ -173,16 +170,24 @@ class DBProduct extends Product
         $attributes = $this->fetchAttributesWithItems();
         $rows = $this->fetchProductRows();
 
-        $products = [];
+        $groupedRows = [];
+
         foreach ($rows as $row) {
             $productId = $row['id'];
-            if (!isset($products[$productId])) {
-                $products[$productId] = $this->formatProduct(
-                    array_filter($rows, fn($r) => $r['id'] === $productId),
-                    $prices[$productId] ?? [],
-                    $attributes[$productId] ?? []
-                );
+            if (!$productId) {
+                continue;
             }
+            $groupedRows[$productId][] = $row;
+        }
+
+        $products = [];
+
+        foreach ($groupedRows as $productId => $productRows) {
+            $products[$productId] = $this->formatProduct(
+                $productRows,
+                $prices[$productId] ?? [],
+                $attributes[$productId] ?? []
+            );
         }
 
         return array_values($products);
