@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\GraphQL;
 
 use App\GraphQL\Query\CategoryQuery;
 use App\GraphQL\Query\ProductQuery;
