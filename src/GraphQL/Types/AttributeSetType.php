@@ -12,7 +12,7 @@ class AttributeSetType extends ObjectType
         parent::__construct([
             'name' => 'AttributeSet',
             'fields' => [
-                'id' => Type::nonNull(Type::string()),
+                'id' => (Type::string()),
                 'name' => Type::nonNull(Type::string()),
                 'items' => [
                     'type' => Type::nonNull(Type::listOf(Type::nonNull(new AttributeType()))),
