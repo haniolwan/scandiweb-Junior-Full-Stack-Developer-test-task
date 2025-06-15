@@ -29,9 +29,9 @@ class ProductType extends ObjectType
                 ],
                 'attributes' => [
                     'type' => Type::listOf(Type::nonNull(new AttributeSetType())),
-                    'resolve' => function ($root, $args) {
+                    'resolve' => function ($root) {
                         try {
-                            return AttributeQuery::get($args['id']);
+                            return AttributeQuery::get($root['id']);
                         } catch (Throwable $e) {
                             return $e;
                         }
