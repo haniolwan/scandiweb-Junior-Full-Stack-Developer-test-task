@@ -140,6 +140,9 @@ class DBProduct extends Product
         if (empty($rows)) {
             return null;
         }
+        if (empty($row[0]['id'])) {
+            continue;
+        }
 
         $productId = $rows[0]['id'];
         $product = [
@@ -155,6 +158,7 @@ class DBProduct extends Product
         ];
 
         foreach ($rows as $row) {
+
             if (!empty($row['gallery_image']) && !in_array($row['gallery_image'], $product['gallery'])) {
                 $product['gallery'][] = $row['gallery_image'];
             }
