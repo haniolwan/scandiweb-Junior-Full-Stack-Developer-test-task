@@ -2,6 +2,7 @@
 
 namespace App\GraphQL;
 
+use App\GraphQL\Mutation\OrderMutation;
 use App\GraphQL\Query\CategoryQuery;
 use App\GraphQL\Query\ProductQuery;
 use App\GraphQL\Types\CategoryType;
@@ -78,8 +79,7 @@ class GraphQL
                         ],
                         'resolve' => function ($root, $args) {
                             try {
-                                $order = new Order();
-                                return $order->createOrderWithItems($args['products']);
+                                return OrderMutation::createOrder($args['products']);
                             } catch (Throwable $e) {
                                 error_log('Error creating order: ' . $e->getMessage());
                             }

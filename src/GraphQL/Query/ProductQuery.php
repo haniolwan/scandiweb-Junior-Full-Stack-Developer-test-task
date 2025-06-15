@@ -2,7 +2,6 @@
 
 namespace App\GraphQL\Query;
 
-use App\Factories\ProductControllerFactory;
 use App\Models\DBProduct;
 
 class ProductQuery

@@ -2,7 +2,6 @@
 
 namespace App\GraphQL\Query;
 
-use App\Factories\CategoryControllerFactory;
 use App\Models\DBCategory;
 
 class CategoryQuery
