@@ -13,11 +13,11 @@ class AttributeSetType extends ObjectType
             'name' => 'AttributeSet',
             'fields' => [
                 'id' => (Type::string()),
-                'name' => Type::nonNull(Type::string()),
+                'name' => (Type::string()),
                 'items' => [
-                    'type' => Type::nonNull(Type::listOf(Type::nonNull(new AttributeType()))),
+                    'type' => (Type::listOf(Type::nonNull(new AttributeType()))),
                 ],
-                'type' => Type::nonNull(Type::string()),
+                'type' => (Type::string()),
             ],
         ]);
     }
