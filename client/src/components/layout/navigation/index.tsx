@@ -2,15 +2,20 @@ import classNames from "classnames";
 import { useProductFilters } from "../../../context/productFilters";
 import { useQuery, gql } from "@apollo/client";
 import { Category } from "../../../helpers/types";
+import { useParams } from "react-router-dom";
 
 export const CategoryNav = ({ category }: { category: string }) => {
   const { filter, updatedFilters } = useProductFilters();
 
   const isActive = filter === category;
+  const { id } = useParams();
+
+  const isPDP = id;
   return (
     <div
       className={classNames("hover:border-b border-primary relative flex", {
         "border-b border-primary": isActive,
+        "pointer-events-none": isPDP,
       })}
     >
       <a

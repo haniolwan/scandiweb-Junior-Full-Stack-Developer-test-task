@@ -85,7 +85,7 @@ const Info = ({ product }: Props) => {
   const isOutOfStock =
     new URLSearchParams(location.search).get("status") === "out-of-stock";
 
-  const isDisabled = !Object.values(selectedAttributes).every(Boolean); // disable add to cart button when there's no options
+  const isDisabled = !Object.values(selectedAttributes).every(Boolean);
 
   const toKebabCase = (str: string) =>
     str
@@ -104,8 +104,6 @@ const Info = ({ product }: Props) => {
         <div className="mt-2">
           <div>
             {product.attributes.map(attr => {
-              console.log(`product-attribute-${toKebabCase(attr.id)}`);
-
               if (attr.id === "Size") {
                 return (
                   <div key={attr.id} data-testid="product-attribute-size">
@@ -178,7 +176,7 @@ const Info = ({ product }: Props) => {
                                   "!bg-gray-900 !text-white":
                                     selectedAttributes[attr.id] === item.value,
                                 },
-                                "w-16 h-14 hover:text-gray-900 group relative flex cursor-pointer items-center justify-center rounded-md border bg-white text-sm font-medium text-gray-900 uppercase shadow-xs hover:bg-gray-300 focus:outline-hidden sm:flex-1"
+                                "max-w-16 h-14 hover:text-gray-900 group relative flex cursor-pointer items-center justify-center border bg-white text-sm font-medium text-gray-900 uppercase shadow-xs hover:bg-gray-300 focus:outline-hidden sm:flex-1"
                               )}
                               onClick={() =>
                                 handleItemSelect(attr.id, item.value)

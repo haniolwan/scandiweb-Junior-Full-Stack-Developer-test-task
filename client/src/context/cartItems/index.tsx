@@ -3,13 +3,13 @@ import { CartItem, Product } from "../../helpers/types";
 
 interface CartItemsContextType {
   openCart: boolean;
-  setOpenCart: (open: boolean) => void; // this for open and close cart
+  setOpenCart: (open: boolean) => void;
 
-  displayCartItems: Product[]; // this for display product with choosing different attributes
+  displayCartItems: Product[];
   updateDisplayCartItems: (products: Product[]) => void;
 
   selectedCartItems: CartItem[];
-  updateSelectedCartItems: (items: CartItem[]) => void; // change to new shape for api request
+  updateSelectedCartItems: (items: CartItem[]) => void;
 }
 
 const TotalItemsContext = createContext<CartItemsContextType | undefined>(
@@ -28,7 +28,6 @@ export const TotalItemsProvider: React.FC<TotalItemsProviderProps> = ({
       const storedItems = localStorage.getItem("cart_display_items");
       return storedItems ? JSON.parse(storedItems) : [];
     } catch (error) {
-      console.error("Failed to load cart from localStorage", error);
       return [];
     }
   });

@@ -1,19 +1,12 @@
-import {
-  useEffect,
-  //  useState
-} from "react";
-// import Sidebar from "./sidebar";
+import { useEffect } from "react";
 import { Navigation } from "./navigation";
 import CartPopup from "./cart/popup";
 import { Logo } from "../icons";
-// import { OpenMenuButton } from "./buttons";
 import { Outlet, useLocation } from "react-router";
 import Overlay from "./overlay";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 
 const Layout = () => {
-  // const [openSidebar, setOpenSidebar] = useState(false);
-
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -30,7 +23,6 @@ const Layout = () => {
   return (
     <ApolloProvider client={client}>
       <div>
-        {/* <Sidebar open={openSidebar} setOpen={setOpenSidebar} /> */}
         <nav aria-label="Top" className="">
           <Overlay />
 
@@ -38,7 +30,6 @@ const Layout = () => {
             className="relative flex h-16 items-center !bg-white !z-40
           px-4 sm:px-6 lg:px-8"
           >
-            {/* <OpenMenuButton setOpen={setOpenSidebar} /> */}
             <Navigation />
             <Logo />
             <CartPopup />

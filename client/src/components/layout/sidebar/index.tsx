@@ -31,8 +31,6 @@ const Sidebar = ({ open, setOpen }: Props) => {
     );
   };
 
-  // const { filter, updatedFilters } = useProductFilters();
-
   const sidebarRef = useRef<HTMLDivElement | null>(null);
 
   useOutsideClick(sidebarRef, () => setOpen(false));

@@ -1,6 +1,5 @@
-import { MouseEvent, useMemo, useRef, useState } from "react";
+import { MouseEvent, useEffect, useMemo, useRef, useState } from "react";
 import { CartIcon } from "../../../icons";
-// import useOutsideClick from "../../../../hooks/useOutsideClick";
 import { useTotalCartItems } from "../../../../context/cartItems";
 import { gql, useMutation } from "@apollo/client";
 import CartMenuContent from "../content";
@@ -15,7 +14,8 @@ const CREATE_ORDER_MUTATION = gql`
 `;
 
 const CartPopup = () => {
-  const cartMenuRef = useRef<HTMLDivElement | null>(null);
+  const cartMenuRef = useRef<HTMLDivElement>(null);
+  const cartButton = useRef<HTMLButtonElement>(null);
 
   const {
     openCart,
@@ -25,7 +25,23 @@ const CartPopup = () => {
     updateDisplayCartItems,
   } = useTotalCartItems();
 
-  // useOutsideClick(cartMenuRef, () => setOpenCart(false));
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        cartMenuRef.current &&
+        cartButton.current &&
+        !cartMenuRef.current.contains(event.target as Node) &&
+        !cartButton.current.contains(event.target as Node)
+      ) {
+        setOpenCart(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [setOpenCart]);
 
   const cartLength = useMemo(
     () => selectedCartItems.reduce((total, item) => total + item.quantity, 0),
@@ -54,7 +70,7 @@ const CartPopup = () => {
         event.currentTarget.disabled = true;
         setLoading(true);
 
-        const { data } = await createOrder({
+        await createOrder({
           variables: {
             products: selectedCartItems.map(item => ({
               product_id: item.productId,
@@ -67,7 +83,6 @@ const CartPopup = () => {
             })),
           },
         });
-        console.log("Order created successfully: ", data);
 
         updateSelectedCartItems([]);
         updateDisplayCartItems([]);
@@ -84,6 +99,7 @@ const CartPopup = () => {
       <div className="ml-4 flow-root lg:ml-6">
         <div className="relative inline-block text-left">
           <button
+            ref={cartButton}
             type="button"
             className="group -m-2 flex items-center p-2 cursor-pointer"
             aria-haspopup="true"

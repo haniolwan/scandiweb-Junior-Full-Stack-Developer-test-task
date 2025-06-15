@@ -27,7 +27,7 @@ const Item = ({ cartItem }: Props) => {
       const itemFound =
         item.productId === cartItem.productId &&
         JSON.stringify(item.selectedAttributes) ===
-          JSON.stringify(cartItem.selectedAttributes); // get item by id and attributes
+          JSON.stringify(cartItem.selectedAttributes);
       if (itemFound) {
         return {
           ...item,
@@ -45,7 +45,7 @@ const Item = ({ cartItem }: Props) => {
       const itemFound =
         item.productId === cartItem.productId &&
         JSON.stringify(item.selectedAttributes) ===
-          JSON.stringify(cartItem.selectedAttributes); // get item by id and attributes
+          JSON.stringify(cartItem.selectedAttributes);
       if (itemFound) {
         return {
           ...item,

@@ -14,7 +14,6 @@ export interface Product {
 export interface CartItem {
   productId: string;
   selectedAttributes: {
-    // same id different attributes
     [attributeName: string]: string;
   };
   quantity: number;
@@ -31,7 +30,7 @@ export type Category = {
 interface AttributeSet {
   id: string;
   name: string;
-  type: string; // e.g., "text"
+  type: string;
   items: Attribute[];
   __typename: string;
 }
@@ -50,8 +49,8 @@ interface Price {
 }
 
 interface Currency {
-  label: string; // e.g., "USD"
-  symbol: string; // e.g., "$"
+  label: string;
+  symbol: string;
   __typename: string;
 }
 

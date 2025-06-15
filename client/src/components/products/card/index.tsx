@@ -12,7 +12,7 @@ type Props = {
 const Card = memo(({ product }: Props) => {
   const usdPrice = product.prices.map(
     price => price.currency.label === "USD" && "$" + price.amount.toFixed(2)
-  )[0]; // get usd price
+  )[0];
 
   const {
     displayCartItems,
@@ -23,7 +23,15 @@ const Card = memo(({ product }: Props) => {
 
   const { setOpenCart } = useTotalCartItems();
 
+  console.log(product.id);
+
+  console.log(product.attributes);
   const handleAddItemToCart = () => {
+    const selectedAttributes = product.attributes.reduce((acc, attr) => {
+      acc[attr.id] = attr.items[0]?.value || "";
+      return acc;
+    }, {} as Record<string, string>);
+
     const isInDisplayCart = displayCartItems.some(
       item => item.id === product.id
     );
@@ -32,14 +40,8 @@ const Card = memo(({ product }: Props) => {
       updateDisplayCartItems([...displayCartItems, product]);
     }
 
-    const selectedAttributes = product.attributes.reduce((acc, attr) => {
-      acc[attr.id] = attr.items[0]?.value || "";
-      return acc;
-    }, {} as Record<string, string>);
-
     const updatedItems = selectedCartItems.map(item => {
       const isSameProduct = item.productId === product.id;
-
       const isSameAttributes =
         JSON.stringify(item.selectedAttributes) ===
         JSON.stringify(selectedAttributes);
@@ -67,12 +69,63 @@ const Card = memo(({ product }: Props) => {
         selectedAttributes,
         quantity: 1,
         price: product.prices[0].amount,
-        currencyLabel: product.prices[0].currency.label,
+        currencyLabel: product.prices[0].currency.symbol,
       });
     }
 
     updateSelectedCartItems(updatedItems);
   };
+
+  // const handleAddItemToCart = () => {
+  //   const isInDisplayCart = displayCartItems.some(
+  //     item => item.id === product.id
+  //   );
+
+  //   if (!isInDisplayCart) {
+  //     updateDisplayCartItems([...displayCartItems, product]);
+  //   }
+
+  //   const selectedAttributes = product.attributes.reduce((acc, attr) => {
+  //     acc[attr.id] = attr.items[0]?.value || "";
+  //     return acc;
+  //   }, {} as Record<string, string>);
+
+  //   const updatedItems = selectedCartItems.map(item => {
+  //     const isSameProduct = item.productId === product.id;
+
+  //     const isSameAttributes =
+  //       JSON.stringify(item.selectedAttributes) ===
+  //       JSON.stringify(selectedAttributes);
+
+  //     if (isSameProduct && isSameAttributes) {
+  //       return {
+  //         ...item,
+  //         quantity: item.quantity + 1,
+  //       };
+  //     }
+
+  //     return item;
+  //   });
+
+  //   const itemExists = updatedItems.some(
+  //     item =>
+  //       item.productId === product.id &&
+  //       JSON.stringify(item.selectedAttributes) ===
+  //         JSON.stringify(selectedAttributes)
+  //   );
+
+  //   if (!itemExists) {
+  //     updatedItems.push({
+  //       productId: product.id,
+  //       selectedAttributes,
+  //       quantity: 1,
+  //       price: product.prices[0].amount,
+  //       currencyLabel: product.prices[0].currency.label,
+  //     });
+  //   }
+
+  //   updateSelectedCartItems(updatedItems);
+  // };
 
   const toKebabCase = (str: string) =>
     str.trim().replace(/\s+/g, "-").toLowerCase();
