@@ -7,151 +7,32 @@ use PDO;
 
 class DBProduct extends Product
 {
-    public function all()
+    private function fetchPrices($id = null)
     {
-        $stmt = $this->db->query("
-        SELECT 
-            p.*, 
-            g.url AS gallery_image,
-            c.name AS category
-        FROM products p
-        LEFT JOIN categories c ON p.category_id = c.id
-        LEFT JOIN galleries g ON p.id = g.product_id
-        ");
+        $sql = "
+            SELECT 
+                pr.product_id,
+                pr.amount,
+                c.label AS currency_label,
+                c.symbol AS currency_symbol
+            FROM prices pr
+            LEFT JOIN currencies c ON pr.currency_label = c.label
+        ";
+
+        if ($id !== null) {
+            $sql .= " WHERE pr.product_id = :id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute(['id' => $id]);
+        } else {
+            $stmt = $this->db->query($sql);
+        }
+
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $prices = [];
 
-        $currStmt = $this->db->query("
-        SELECT 
-            pr.product_id,
-            pr.amount,
-            c.label AS currency_label,
-            c.symbol AS currency_symbol
-        FROM prices pr
-        LEFT JOIN currencies c ON pr.currency_label = c.label
-    ");
-        $currencyRows = $currStmt->fetchAll(PDO::FETCH_ASSOC);
-
-        $attrStmt = $this->db->query("
-        SELECT
-            pa.product_id,
-            att.id AS attribute_id,
-            att.name AS attribute_name,
-            att.type AS attribute_type,
-            att_items.id AS item_id,
-            att_items.value,
-            att_items.displayValue
-        FROM product_attributes pa
-        LEFT JOIN attributes att ON pa.attribute_id = att.id
-        LEFT JOIN product_attribute_items pai ON pa.product_id = pai.product_id
-        LEFT JOIN attribute_items att_items ON pai.attribute_item_id = att_items.id
-    ");
-        $attributeRows = $attrStmt->fetchAll(PDO::FETCH_ASSOC);
-
-        $attributesByProduct = [];
-        $existingItemIds = [];
-
-        foreach ($attributeRows as $row) {
-            $productId = $row['product_id'];
-            $attrId = $row['attribute_id'];
-            $itemId = $row['item_id'];
-
-            if (!isset($attributesByProduct[$productId][$attrId])) {
-                $attributesByProduct[$productId][$attrId] = [
-                    'id' => $row['attribute_name'],
-                    'name' => $row['attribute_name'],
-                    'type' => $row['attribute_type'],
-                    'items' => [],
-                    '__typename' => 'AttributeSet',
-                ];
-                $existingItemIds[$productId][$attrId] = [];
-            }
-
-            if (!in_array($itemId, $existingItemIds[$productId][$attrId])) {
-                $attributesByProduct[$productId][$attrId]['items'][] = [
-                    'id' => $itemId,
-                    'value' => $row['value'],
-                    'displayValue' => $row['displayValue'],
-                    '__typename' => 'Attribute',
-                ];
-                $existingItemIds[$productId][$attrId][] = $itemId;
-            }
-        }
-
-        $pricesByProduct = [];
-        foreach ($currencyRows as $priceRow) {
-            $productId = $priceRow['product_id'];
-            $pricesByProduct[$productId][] = [
-                'amount' => (float)$priceRow['amount'],
-                'currency' => [
-                    'label' => $priceRow['currency_label'],
-                    'symbol' => $priceRow['currency_symbol'],
-                    '__typename' => 'Currency',
-                ],
-                '__typename' => 'Price',
-            ];
-        }
-
-        $products = [];
         foreach ($rows as $row) {
-            $productId = $row['id'];
-
-            if (!isset($products[$productId])) {
-                $products[$productId] = [
-                    'id' => $productId,
-                    'name' => $row['name'],
-                    'inStock' => (bool)$row['inStock'],
-                    'gallery' => [],
-                    'description' => $row['description'],
-                    'prices' => $pricesByProduct[$productId] ?? [],
-                    'category' => $row['category'],
-                    'brand' => $row['brand'],
-                    'attributes' => array_values($attributesByProduct[$productId] ?? []),
-                ];
-            }
-
-            if (!empty($row['gallery_image']) && !in_array($row['gallery_image'], $products[$productId]['gallery'])) {
-                $products[$productId]['gallery'][] = $row['gallery_image'];
-            }
-        }
-
-        return array_values($products);
-    }
-
-
-    public function show($id)
-    {
-        $stmt = $this->db->prepare("
-        SELECT 
-            p.*, 
-            g.url AS gallery_image,
-            c.name AS category
-        FROM products p
-        LEFT JOIN categories c ON p.category_id = c.id
-        LEFT JOIN galleries g ON p.id = g.product_id
-        WHERE p.id = :id
-    ");
-        $stmt->execute(['id' => $id]);
-        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        if (empty($rows)) {
-            return null;
-        }
-
-        $currStmt = $this->db->prepare("
-        SELECT 
-            pr.product_id,
-            pr.amount,
-            c.label AS currency_label,
-            c.symbol AS currency_symbol
-        FROM prices pr
-        LEFT JOIN currencies c ON pr.currency_label = c.label
-        WHERE pr.product_id = :id
-    ");
-        $currStmt->execute(['id' => $id]);
-        $currencyRows = $currStmt->fetchAll(PDO::FETCH_ASSOC);
-
-        $prices = array_map(function ($row) {
-            return [
+            $productId = $row['product_id'];
+            $price = [
                 'amount' => (float)$row['amount'],
                 'currency' => [
                     'label' => $row['currency_label'],
@@ -160,60 +41,109 @@ class DBProduct extends Product
                 ],
                 '__typename' => 'Price',
             ];
-        }, $currencyRows);
 
-        // Fetch Attributes
-        $attrStmt = $this->db->prepare("
+            $prices[$productId][] = $price;
+        }
+
+        return $id !== null ? ($prices[$id] ?? []) : $prices;
+    }
+
+    private function fetchAttributesWithItems($id = null)
+    {
+        $sql = "
             SELECT
-            pa.product_id,
-            att.id AS attribute_id,
-            att.name AS attribute_name,
-            att.type AS attribute_type,
-            att_items.id AS item_id,
-            att_items.value,
-            att_items.displayValue
+                pa.product_id,
+                att.id AS attribute_id,
+                att.name AS attribute_name,
+                att.type AS attribute_type,
+                att_items.id AS item_id,
+                att_items.value,
+                att_items.displayValue
             FROM product_attributes pa
-        LEFT JOIN attributes att ON pa.attribute_id = att.id
-        LEFT JOIN product_attribute_items pai 
-            ON pa.product_id = pai.product_id 
-            AND pa.attribute_id = pai.attribute_id
-        LEFT JOIN attribute_items att_items ON pai.attribute_item_id = att_items.id
-        WHERE pa.product_id = :id
-    ");
-        $attrStmt->execute(['id' => $id]);
-        $attributeRows = $attrStmt->fetchAll(PDO::FETCH_ASSOC);
+            LEFT JOIN attributes att ON pa.attribute_id = att.id
+            LEFT JOIN product_attribute_items pai 
+                ON pa.product_id = pai.product_id 
+                AND pa.attribute_id = pai.attribute_id
+            LEFT JOIN attribute_items att_items ON pai.attribute_item_id = att_items.id
+        ";
 
+        if ($id !== null) {
+            $sql .= " WHERE pa.product_id = :id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute(['id' => $id]);
+        } else {
+            $stmt = $this->db->query($sql);
+        }
+
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $attributes = [];
-        $existingItemIds = [];
 
-        foreach ($attributeRows as $row) {
+        foreach ($rows as $row) {
+            $productId = $row['product_id'];
             $attrId = $row['attribute_id'];
             $itemId = $row['item_id'];
 
-            if (!isset($attributes[$attrId])) {
-                $attributes[$attrId] = [
+            if (!isset($attributes[$productId][$attrId])) {
+                $attributes[$productId][$attrId] = [
                     'id' => $row['attribute_name'],
                     'name' => $row['attribute_name'],
                     'type' => $row['attribute_type'],
                     'items' => [],
                     '__typename' => 'AttributeSet',
                 ];
-                $existingItemIds[$attrId] = [];
             }
 
-            if (!in_array($itemId, $existingItemIds[$attrId])) {
-                $attributes[$attrId]['items'][] = [
+            if (!isset($attributes[$productId][$attrId]['items'][$itemId])) {
+                $attributes[$productId][$attrId]['items'][$itemId] = [
                     'id' => $itemId,
                     'value' => $row['value'],
                     'displayValue' => $row['displayValue'],
                     '__typename' => 'Attribute',
                 ];
-                $existingItemIds[$attrId][] = $itemId;
             }
         }
 
+        foreach ($attributes as &$attrGroup) {
+            foreach ($attrGroup as &$attribute) {
+                $attribute['items'] = array_values($attribute['items']);
+            }
+        }
+
+        return $id !== null ? ($attributes[$id] ?? []) : $attributes;
+    }
+
+    private function fetchProductRows($id = null)
+    {
+        $sql = "
+            SELECT 
+                p.*, 
+                g.url AS gallery_image,
+                c.name AS category
+            FROM products p
+            LEFT JOIN categories c ON p.category_id = c.id
+            LEFT JOIN galleries g ON p.id = g.product_id
+        ";
+
+        if ($id !== null) {
+            $sql .= " WHERE p.id = :id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute(['id' => $id]);
+        } else {
+            $stmt = $this->db->query($sql);
+        }
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    private function formatProduct($rows, $prices, $attributes)
+    {
+        if (empty($rows)) {
+            return null;
+        }
+
+        $productId = $rows[0]['id'];
         $product = [
-            'id' => $rows[0]['id'],
+            'id' => $productId,
             'name' => $rows[0]['name'],
             'inStock' => (bool)$rows[0]['inStock'],
             'gallery' => [],
@@ -231,5 +161,35 @@ class DBProduct extends Product
         }
 
         return $product;
+    }
+
+    public function all()
+    {
+        $prices = $this->fetchPrices();
+        $attributes = $this->fetchAttributesWithItems();
+        $rows = $this->fetchProductRows();
+
+        $products = [];
+        foreach ($rows as $row) {
+            $productId = $row['id'];
+            if (!isset($products[$productId])) {
+                $products[$productId] = $this->formatProduct(
+                    array_filter($rows, fn($r) => $r['id'] === $productId),
+                    $prices[$productId] ?? [],
+                    $attributes[$productId] ?? []
+                );
+            }
+        }
+
+        return array_values($products);
+    }
+
+    public function show($id)
+    {
+        $prices = $this->fetchPrices($id);
+        $attributes = $this->fetchAttributesWithItems($id);
+        $rows = $this->fetchProductRows($id);
+
+        return $this->formatProduct($rows, $prices, $attributes);
     }
 }

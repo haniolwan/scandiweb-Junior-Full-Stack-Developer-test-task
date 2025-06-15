@@ -81,7 +81,7 @@ class GraphQL
                             try {
                                 return OrderMutation::createOrder($args['products']);
                             } catch (Throwable $e) {
-                                error_log('Error creating order: ' . $e->getMessage());
+                                return ('Error creating order: ' . $e->getMessage());
                             }
                         }
                     ],
