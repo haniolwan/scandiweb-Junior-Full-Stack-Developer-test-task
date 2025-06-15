@@ -8,7 +8,6 @@ use App\GraphQL\Query\ProductQuery;
 use App\GraphQL\Types\CategoryType;
 use App\GraphQL\Types\OrderType;
 use App\GraphQL\Types\ProductType;
-use App\Models\Order;
 use GraphQL\Error\DebugFlag;
 use GraphQL\GraphQL as GraphQLBase;
 use GraphQL\Type\Definition\InputObjectType;
