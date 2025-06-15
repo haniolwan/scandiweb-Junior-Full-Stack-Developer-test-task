@@ -12,6 +12,7 @@ class OrderType extends ObjectType
         parent::__construct([
             'name' => 'Order',
             'fields' => [
+                'id' => (Type::id()),
                 'product_id' => Type::nonNull(Type::id()),
                 'currency_label' => Type::nonNull(Type::string()),
                 'price' => Type::nonNull(Type::float()),
