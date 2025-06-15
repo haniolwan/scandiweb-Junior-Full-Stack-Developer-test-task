@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\GraphQL\Query;
+
+use App\Models\DBAttribute;
 
 class AttributeQuery
 {

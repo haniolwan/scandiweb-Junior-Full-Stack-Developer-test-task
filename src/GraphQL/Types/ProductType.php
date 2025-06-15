@@ -2,7 +2,7 @@
 
 namespace App\GraphQL\Types;
 
-use App\Models\AttributeQuery;
+use App\GraphQL\Query\AttributeQuery;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use Throwable;
