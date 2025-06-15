@@ -2,8 +2,10 @@
 
 namespace App\GraphQL\Types;
 
+use App\Models\AttributeQuery;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
+use Throwable;
 
 class ProductType extends ObjectType
 {
@@ -27,9 +29,13 @@ class ProductType extends ObjectType
                 ],
                 'attributes' => [
                     'type' => Type::listOf(Type::nonNull(new AttributeSetType())),
-                    'resolve' => function ($product) {
-                        return $product['attributes'];
-                    },
+                    'resolve' => function ($root, $args) {
+                        try {
+                            return AttributeQuery::get($args['id']);
+                        } catch (Throwable $e) {
+                            return $e;
+                        }
+                    }
                 ],
                 'prices' => [
                     'type' => Type::listOf(Type::nonNull(new PriceType())),

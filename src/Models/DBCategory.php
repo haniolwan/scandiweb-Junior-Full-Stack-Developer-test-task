@@ -6,7 +6,6 @@ use PDO;
 
 class DBCategory extends Category
 {
-
     public function all()
     {
         $stmt = $this->db->query("SELECT * FROM categories");
