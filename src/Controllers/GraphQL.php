@@ -29,7 +29,7 @@ class GraphQL
                     'products' => [
                         'type' => Type::listOf(new ProductType()),
                         'args' => [
-                            'id' => Type::string(), // optional
+                            'id' => Type::string(),
                         ],
                         'resolve' => function ($root, $args) {
                             try {
@@ -51,7 +51,6 @@ class GraphQL
                                 return CategoryQuery::get();
                             } catch (Throwable $e) {
                                 return ('Error fetching categories: ' . $e->getMessage());
-                                // return [];
                             }
                         }
                     ]
@@ -65,7 +64,7 @@ class GraphQL
                     'currency_label' => Type::string(),
                     'price' => Type::nonNull(Type::float()),
                     'quantity' => Type::nonNull(Type::int()),
-                    'attribute_item_ids' => Type::nonNull(Type::string()), // or Type::listOf(Type::string())
+                    'attribute_item_ids' => Type::nonNull(Type::string()),
                 ],
             ]);
 

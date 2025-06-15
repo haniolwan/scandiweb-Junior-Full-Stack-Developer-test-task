@@ -11,7 +11,6 @@ class Database
     protected function connect()
     {
         try {
-            // Should be hidden for testing purposes only
             $host = 'localhost';
             $dbname = 'scandiweb';
             $username = 'root';

@@ -20,7 +20,7 @@ class ProductType extends ObjectType
                 ],
                 'description' => Type::string(),
                 'category' => [
-                    'type' => Type::string(), // or new CategoryType() if it's an object
+                    'type' => Type::string(),
                     'resolve' => function ($product) {
                         return $product['category'];
                     },
