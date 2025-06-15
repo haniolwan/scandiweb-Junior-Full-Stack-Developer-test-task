@@ -10,12 +10,12 @@ class ProductQuery
     public static function get()
     {
         $product = new DBProduct();
-        $product->all();
+        return $product->all();
     }
 
     public static function find($id)
     {
         $product = new DBProduct();
-        $product->show($id);
+        return $product->show($id);
     }
 }
