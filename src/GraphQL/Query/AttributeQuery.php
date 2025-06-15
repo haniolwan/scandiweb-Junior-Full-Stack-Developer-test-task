@@ -6,9 +6,9 @@ use App\Models\DBAttribute;
 
 class AttributeQuery
 {
-    public static function get(): array
+    public static function get($id): array
     {
         $attributes = new DBAttribute();
-        return $attributes->fetchProductAttributes();
+        return $attributes->fetchProductAttributes($id);
     }
 }
