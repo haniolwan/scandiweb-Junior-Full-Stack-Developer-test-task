@@ -40,8 +40,6 @@ const Product = () => {
 
   const { data, loading } = useQuery(PRODUCTS_QUERY, {
     variables: { id },
-    fetchPolicy: "cache-first",
-    nextFetchPolicy: "cache-first",
   });
 
   return (

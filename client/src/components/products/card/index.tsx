@@ -24,8 +24,8 @@ const Card = memo(({ product }: Props) => {
   const { setOpenCart } = useTotalCartItems();
 
   console.log(product.id);
-
   console.log(product.attributes);
+
   const handleAddItemToCart = () => {
     const selectedAttributes = product.attributes.reduce((acc, attr) => {
       acc[attr.id] = attr.items[0]?.value || "";

@@ -95,6 +95,7 @@ const Info = ({ product }: Props) => {
 
   const { setOpenCart } = useTotalCartItems();
 
+  console.log(product.attributes);
   return (
     <div>
       <div>

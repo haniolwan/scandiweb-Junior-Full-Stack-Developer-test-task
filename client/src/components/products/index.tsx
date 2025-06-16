@@ -56,6 +56,7 @@ const Products = () => {
     );
   }, [data, filter]);
 
+  console.log(products);
   return (
     !loading && (
       <Layout>

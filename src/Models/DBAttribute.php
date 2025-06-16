@@ -18,13 +18,12 @@ class DBAttribute extends Attribute
                 att_items.value,
                 att_items.displayValue
             FROM product_attributes pa
-            LEFT JOIN attributes att ON pa.attribute_id = att.id
-            LEFT JOIN product_attribute_items pai 
+            INNER JOIN attributes att ON pa.attribute_id = att.id
+            INNER JOIN product_attribute_items pai 
                 ON pa.product_id = pai.product_id 
                 AND pa.attribute_id = pai.attribute_id
-            LEFT JOIN attribute_items att_items ON pai.attribute_item_id = att_items.id
+            INNER JOIN attribute_items att_items ON pai.attribute_item_id = att_items.id
         ";
-
         if ($id !== null) {
             $sql .= " WHERE pa.product_id = :id";
             $stmt = $this->db->prepare($sql);
@@ -32,7 +31,6 @@ class DBAttribute extends Attribute
         } else {
             $stmt = $this->db->query($sql);
         }
-
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $attributes = [];
 
