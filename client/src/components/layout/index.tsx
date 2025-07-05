@@ -4,6 +4,7 @@ import { Logo } from "../icons";
 import { Outlet, useLocation } from "react-router";
 import Overlay from "./overlay";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import { Navigation } from "./navigation";
 
 const Layout = () => {
   const { pathname } = useLocation();

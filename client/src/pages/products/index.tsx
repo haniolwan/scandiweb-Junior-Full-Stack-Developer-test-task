@@ -43,7 +43,8 @@ const Products = () => {
   const { filter } = useProductFilters();
 
   const { data, loading } = useQuery(PRODUCTS_QUERY, {
-    variables: { id },
+    variables: id ? { id } : {},
+    fetchPolicy: "network-only",
   });
 
   const filterProperty = filter === "all" ? null : filter;
@@ -57,6 +58,7 @@ const Products = () => {
   }, [data, filter]);
 
   console.log(products);
+
   return (
     !loading && (
       <Layout>
