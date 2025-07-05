@@ -27,7 +27,7 @@ export const TotalItemsProvider: React.FC<TotalItemsProviderProps> = ({
     try {
       const storedItems = localStorage.getItem("cart_display_items");
       return storedItems ? JSON.parse(storedItems) : [];
-    } catch (error) {
+    } catch {
       return [];
     }
   });
