@@ -24,6 +24,7 @@ class DBAttribute extends Attribute
                 AND pa.attribute_id = pai.attribute_id
             INNER JOIN attribute_items att_items ON pai.attribute_item_id = att_items.id
         ";
+
         if ($id !== null) {
             $sql .= " WHERE pa.product_id = :id";
             $stmt = $this->db->prepare($sql);
@@ -31,6 +32,7 @@ class DBAttribute extends Attribute
         } else {
             $stmt = $this->db->query($sql);
         }
+
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $attributes = [];
 
@@ -41,7 +43,7 @@ class DBAttribute extends Attribute
 
             if (!isset($attributes[$productId][$attrId])) {
                 $attributes[$productId][$attrId] = [
-                    'id' => $row['attribute_name'],
+                    'id' => $row['attribute_id'],
                     'name' => $row['attribute_name'],
                     'type' => $row['attribute_type'],
                     'items' => [],
@@ -65,6 +67,18 @@ class DBAttribute extends Attribute
             }
         }
 
-        return $id !== null ? ($attributes[$id] ?? []) : $attributes;
+        if ($id !== null) {
+            return array_values($attributes[$id] ?? []);
+        }
+
+        $flattened = [];
+        foreach ($attributes as $productId => $attrGroup) {
+            $flattened[] = [
+                'product_id' => $productId,
+                'attributes' => array_values($attrGroup),
+            ];
+        }
+
+        return $flattened;
     }
 }
