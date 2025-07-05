@@ -1,5 +1,5 @@
 import { useProductFilters } from "../../context/productFilters";
-import Layout from "../../pages/layout";
+import Layout from "../layout";
 import { Product } from "../../helpers/types";
 import Card from "./card";
 import { useQuery, gql } from "@apollo/client";

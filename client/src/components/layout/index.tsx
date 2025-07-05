@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { Navigation } from "./navigation";
 import CartPopup from "./cart/popup";
 import { Logo } from "../icons";
 import { Outlet, useLocation } from "react-router";

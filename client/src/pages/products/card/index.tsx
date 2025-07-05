@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { Product } from "../../../helpers/types";
-import { CartIcon } from "../../icons";
+import { CartIcon } from "../../../components/icons";
 import { Link } from "react-router";
 import { useTotalCartItems } from "../../../context/cartItems";
 import { memo } from "react";
@@ -75,57 +75,6 @@ const Card = memo(({ product }: Props) => {
 
     updateSelectedCartItems(updatedItems);
   };
-
-  // const handleAddItemToCart = () => {
-  //   const isInDisplayCart = displayCartItems.some(
-  //     item => item.id === product.id
-  //   );
-
-  //   if (!isInDisplayCart) {
-  //     updateDisplayCartItems([...displayCartItems, product]);
-  //   }
-
-  //   const selectedAttributes = product.attributes.reduce((acc, attr) => {
-  //     acc[attr.id] = attr.items[0]?.value || "";
-  //     return acc;
-  //   }, {} as Record<string, string>);
-
-  //   const updatedItems = selectedCartItems.map(item => {
-  //     const isSameProduct = item.productId === product.id;
-
-  //     const isSameAttributes =
-  //       JSON.stringify(item.selectedAttributes) ===
-  //       JSON.stringify(selectedAttributes);
-
-  //     if (isSameProduct && isSameAttributes) {
-  //       return {
-  //         ...item,
-  //         quantity: item.quantity + 1,
-  //       };
-  //     }
-
-  //     return item;
-  //   });
-
-  //   const itemExists = updatedItems.some(
-  //     item =>
-  //       item.productId === product.id &&
-  //       JSON.stringify(item.selectedAttributes) ===
-  //         JSON.stringify(selectedAttributes)
-  //   );
-
-  //   if (!itemExists) {
-  //     updatedItems.push({
-  //       productId: product.id,
-  //       selectedAttributes,
-  //       quantity: 1,
-  //       price: product.prices[0].amount,
-  //       currencyLabel: product.prices[0].currency.label,
-  //     });
-  //   }
-
-  //   updateSelectedCartItems(updatedItems);
-  // };
 
   const toKebabCase = (str: string) =>
     str.trim().replace(/\s+/g, "-").toLowerCase();
