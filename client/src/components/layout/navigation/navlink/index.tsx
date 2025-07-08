@@ -1,6 +1,6 @@
 import classNames from "classnames";
-import { useProductFilters } from "../../../../context/productFilters";
 import { useParams } from "react-router-dom";
+import { useProductFilters } from "../../../../context/productFilters/useProductFilters";
 
 export const NavLink = ({ category }: { category: string }) => {
   const { filter, updatedFilters } = useProductFilters();

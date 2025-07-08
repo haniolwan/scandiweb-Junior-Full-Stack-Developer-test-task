@@ -1,7 +1,8 @@
-import React, { createContext, useState, useContext, ReactNode } from "react";
+import React, { useState, ReactNode } from "react";
 import { CartItem, Product } from "../../helpers/types";
+import { TotalItemsContext } from "./useTotalCartItems";
 
-interface CartItemsContextType {
+export interface CartItemsContextType {
   openCart: boolean;
   setOpenCart: (open: boolean) => void;
 
@@ -11,10 +12,6 @@ interface CartItemsContextType {
   selectedCartItems: CartItem[];
   updateSelectedCartItems: (items: CartItem[]) => void;
 }
-
-const TotalItemsContext = createContext<CartItemsContextType | undefined>(
-  undefined
-);
 
 interface TotalItemsProviderProps {
   children: ReactNode;
@@ -67,14 +64,4 @@ export const TotalItemsProvider: React.FC<TotalItemsProviderProps> = ({
       {children}
     </TotalItemsContext.Provider>
   );
-};
-
-export const useTotalCartItems = (): CartItemsContextType => {
-  const context = useContext(TotalItemsContext);
-  if (!context) {
-    throw new Error(
-      "useTotalCartItems must be used within a TotalItemsProvider"
-    );
-  }
-  return context;
 };

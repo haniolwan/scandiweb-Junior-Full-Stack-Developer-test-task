@@ -1,7 +1,7 @@
 import { ToggleAddRemove, ToggleColor, ToggleSize } from "../buttons";
 import classNames from "classnames";
-import { useTotalCartItems } from "../../../../context/cartItems";
 import { CartItem } from "../../../../helpers/types";
+import { useTotalCartItems } from "../../../../context/cartItems/useTotalCartItems";
 
 type Props = {
   cartItem: CartItem;

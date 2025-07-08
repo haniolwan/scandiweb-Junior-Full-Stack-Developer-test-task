@@ -1,4 +1,4 @@
-import { useTotalCartItems } from "../../../context/cartItems";
+import { useTotalCartItems } from "../../../context/cartItems/useTotalCartItems";
 
 const Overlay = () => {
   const { openCart } = useTotalCartItems();

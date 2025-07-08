@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { useParams } from "react-router-dom";
-import { useProductFilters } from "../../../../context/productFilters";
+import { useProductFilters } from "../../../../context/productFilters/useProductFilters";
 
 const CategoryNav = ({ category }: { category: string }) => {
   const { filter, updatedFilters } = useProductFilters();

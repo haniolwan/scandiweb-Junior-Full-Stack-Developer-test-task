@@ -1,10 +1,10 @@
-import { useProductFilters } from "../../context/productFilters";
 import Layout from "../layout";
 import { Product } from "../../helpers/types";
 import Card from "./card";
 import { useQuery, gql } from "@apollo/client";
 import { useMemo } from "react";
 import { useParams } from "react-router-dom";
+import { useProductFilters } from "../../context/productFilters/useProductFilters";
 
 const PRODUCTS_QUERY = gql`
   query GetProducts($id: String) {
@@ -55,7 +55,7 @@ const Products = () => {
       (product: Product) =>
         !filterProperty || product.category === filterProperty
     );
-  }, [data, filter]);
+  }, [data?.products, filterProperty]);
 
   console.log(products);
 

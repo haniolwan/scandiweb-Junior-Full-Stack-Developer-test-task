@@ -1,9 +1,9 @@
 import { MouseEvent, useEffect, useMemo, useRef, useState } from "react";
 import { CartIcon } from "../../../icons";
-import { useTotalCartItems } from "../../../../context/cartItems";
 import { gql, useMutation } from "@apollo/client";
 import CartMenuContent from "../content";
 import { OrderProductInput } from "../../../../helpers/types";
+import { useTotalCartItems } from "../../../../context/cartItems/useTotalCartItems";
 
 const CREATE_ORDER_MUTATION = gql`
   mutation CreateOrder($products: [OrderProductInput!]!) {
@@ -26,7 +26,7 @@ const CartPopup = () => {
   } = useTotalCartItems();
 
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
+    function handleClickOutside(event: globalThis.MouseEvent) {
       if (
         cartMenuRef.current &&
         cartButton.current &&
@@ -86,6 +86,7 @@ const CartPopup = () => {
 
         updateSelectedCartItems([]);
         updateDisplayCartItems([]);
+        setOpenCart(!openCart);
       }
     } catch (error) {
       console.error("Error creating order:", error);

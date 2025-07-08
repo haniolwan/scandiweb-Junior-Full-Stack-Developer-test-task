@@ -2,8 +2,8 @@ import classNames from "classnames";
 import { Product } from "../../../helpers/types";
 import { CartIcon } from "../../../components/icons";
 import { Link } from "react-router";
-import { useTotalCartItems } from "../../../context/cartItems";
 import { memo } from "react";
+import { useTotalCartItems } from "../../../context/cartItems/useTotalCartItems";
 
 type Props = {
   product: Product;

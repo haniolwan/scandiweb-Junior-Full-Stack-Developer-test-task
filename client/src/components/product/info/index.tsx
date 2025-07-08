@@ -2,8 +2,8 @@ import { useState } from "react";
 import { ToggleColor, ToggleSize } from "../../layout/cart/buttons";
 import { Attribute, Product } from "../../../helpers/types";
 import classNames from "classnames";
-import { useTotalCartItems } from "../../../context/cartItems";
 import parse from "html-react-parser";
+import { useTotalCartItems } from "../../../context/cartItems/useTotalCartItems";
 
 type Props = {
   product: Product;
