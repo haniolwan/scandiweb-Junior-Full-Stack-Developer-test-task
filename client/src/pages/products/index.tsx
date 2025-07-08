@@ -13,14 +13,18 @@ const PRODUCTS_QUERY = gql`
       gallery
       description
       category
+      __typename
+
       attributes {
         id
         name
         type
+        __typename
         items {
           id
           displayValue
           value
+          __typename
         }
       }
       prices {
@@ -38,7 +42,9 @@ const PRODUCTS_QUERY = gql`
 const Products = () => {
   const { filter } = useProductFilters();
 
-  const { data, loading } = useQuery(PRODUCTS_QUERY);
+  const { data, loading } = useQuery(PRODUCTS_QUERY, {
+    fetchPolicy: "no-cache",
+  });
 
   const filterProperty = filter === "all" ? null : filter;
 

@@ -42,12 +42,20 @@ export const TotalItemsProvider: React.FC<TotalItemsProviderProps> = ({
 
   const updateDisplayCartItems = (items: Product[]) => {
     setDisplayCartItems(items);
-    window.localStorage.setItem("cart_display_items", JSON.stringify(items));
+    if (items.length === 0) {
+      window.localStorage.removeItem("cart_display_items");
+    } else {
+      window.localStorage.setItem("cart_display_items", JSON.stringify(items));
+    }
   };
 
   const updateSelectedCartItems = (items: CartItem[]) => {
     setSelectedCartItems(items);
-    window.localStorage.setItem("cart_items", JSON.stringify(items));
+    if (items.length === 0) {
+      window.localStorage.removeItem("cart_items");
+    } else {
+      window.localStorage.setItem("cart_items", JSON.stringify(items));
+    }
   };
 
   return (

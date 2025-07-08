@@ -94,10 +94,7 @@ const Card = ({ product }: Props) => {
           <CartIcon className="text-white" width="20" height="20" />
         </button>
       )}
-      <Link
-        className="z-20"
-        to={!product.inStock ? `${product.id}?status=out-of-stock` : product.id}
-      >
+      <Link className="z-20" to={product.id}>
         {!product.inStock && (
           <div className="absolute inset-0 z-10 flex items-center justify-center">
             <span className="text-2xl text-gray-700">Out of stock</span>

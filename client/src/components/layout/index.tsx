@@ -17,7 +17,19 @@ const Layout = () => {
 
   const client = new ApolloClient({
     uri: apiUrl,
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+      typePolicies: {
+        Product: {
+          keyFields: ["id"],
+        },
+        Attribute: {
+          keyFields: ["id"],
+        },
+        AttributeItem: {
+          keyFields: ["id", "value", "displayValue"], // Force uniqueness
+        },
+      },
+    }),
   });
 
   return (
