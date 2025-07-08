@@ -3,12 +3,11 @@ import { Product } from "../../helpers/types";
 import Card from "./card";
 import { useQuery, gql } from "@apollo/client";
 import { useMemo } from "react";
-import { useParams } from "react-router-dom";
 import { useProductFilters } from "../../context/productFilters/useProductFilters";
 
 const PRODUCTS_QUERY = gql`
-  query GetProducts($id: String) {
-    products(id: $id) {
+  query GetProducts {
+    products {
       id
       name
       inStock
@@ -38,12 +37,9 @@ const PRODUCTS_QUERY = gql`
 `;
 
 const Products = () => {
-  const { id } = useParams();
-
   const { filter } = useProductFilters();
 
   const { data, loading } = useQuery(PRODUCTS_QUERY, {
-    variables: id ? { id } : {},
     fetchPolicy: "network-only",
   });
 
@@ -56,8 +52,6 @@ const Products = () => {
         !filterProperty || product.category === filterProperty
     );
   }, [data?.products, filterProperty]);
-
-  console.log(products);
 
   return (
     !loading && (

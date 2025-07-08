@@ -42,7 +42,6 @@ const Product = () => {
     variables: { id },
   });
 
-  console.log(data);
   return (
     data?.products &&
     !loading && (
