@@ -3,10 +3,13 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+
+
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
-    header("Access-Control-Allow-Origin: *");
-    header("Access-Control-Allow-Headers: Content-Type, Authorization");
-    header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+
     $r->post('/graphql', [\App\GraphQL\GraphQL::class, 'handle']);
     $r->get('/db-test', function () {
         try {
