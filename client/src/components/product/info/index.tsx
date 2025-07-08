@@ -78,7 +78,6 @@ const Info = ({ product }: Props) => {
         currencyLabel: product.prices[0].currency.symbol,
       });
     }
-
     updateSelectedCartItems(updatedItems);
   };
 

@@ -2,7 +2,6 @@ import Layout from "../layout";
 import { Product } from "../../helpers/types";
 import Card from "./card";
 import { useQuery, gql } from "@apollo/client";
-import { useMemo } from "react";
 import { useProductFilters } from "../../context/productFilters/useProductFilters";
 
 const PRODUCTS_QUERY = gql`
@@ -39,19 +38,16 @@ const PRODUCTS_QUERY = gql`
 const Products = () => {
   const { filter } = useProductFilters();
 
-  const { data, loading } = useQuery(PRODUCTS_QUERY, {
-    fetchPolicy: "network-only",
-  });
+  const { data, loading } = useQuery(PRODUCTS_QUERY);
 
   const filterProperty = filter === "all" ? null : filter;
 
-  const products = useMemo(() => {
-    if (!data?.products) return [];
-    return data.products.filter(
-      (product: Product) =>
-        !filterProperty || product.category === filterProperty
-    );
-  }, [data?.products, filterProperty]);
+  const products = !data?.products
+    ? []
+    : data.products.filter(
+        (product: Product) =>
+          !filterProperty || product.category === filterProperty
+      );
 
   return (
     !loading && (

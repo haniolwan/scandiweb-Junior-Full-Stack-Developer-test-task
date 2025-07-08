@@ -43,7 +43,7 @@ CREATE TABLE galleries(
 CREATE TABLE attributes(
     id VARCHAR(255) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    type VARCHAR(50) NOT NULL
+    type ENUM('numeric', 'label') NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -54,6 +54,7 @@ CREATE TABLE attribute_items(
     attribute_id VARCHAR(255),
     displayValue VARCHAR(255),
     value VARCHAR(255),
+    value_type ENUM('label', 'numeric') NOT NULL,
     FOREIGN KEY(attribute_id) REFERENCES attributes(id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -351,7 +352,8 @@ INSERT INTO galleries(product_id, url) VALUES('apple-imac-2021', 'https://store.
 -- --------------------------------------------------------
 -- Inserting data into `attributes`
 -- --------------------------------------------------------
-INSERT INTO attributes(id, name, type) VALUES('Size', 'Size', 'text');
+INSERT INTO attributes(id, name, type) VALUES ('Size EU', 'Size', 'numeric');
+INSERT INTO attributes(id, name, type) VALUES ('Size Label', 'Size', 'label');
 INSERT INTO attributes(id, name, type) VALUES('Color', 'Color', 'swatch');
 INSERT INTO attributes(id, name, type) VALUES('Capacity', 'Capacity', 'text');
 INSERT INTO attributes(id, name, type) VALUES('With USB 3 ports', 'With USB 3 ports', 'text');
@@ -361,14 +363,14 @@ INSERT INTO attributes(id, name, type) VALUES('Touch ID in keyboard', 'Touch ID 
 -- Inserting data into `attribute_items`
 -- --------------------------------------------------------
 -- Size attribute items
-INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('40', 'Size', '40', '40');
-INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('41', 'Size', '41', '41');
-INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('42', 'Size', '42', '42');
-INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('43', 'Size', '43', '43');
-INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('Small', 'Size', 'Small', 'S');
-INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('Medium', 'Size', 'Medium', 'M');
-INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('Large', 'Size', 'Large', 'L');
-INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('Extra Large', 'Size', 'Extra Large', 'XL');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('40', 'Size EU', '40', '40','numeric');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('41', 'Size EU', '41', '41','numeric');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('42', 'Size EU', '42', '42','numeric');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('43', 'Size EU', '43', '43','numeric');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('Small', 'Size Label', 'Small', 'S','label');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('Medium', 'Size Label', 'Medium', 'M','label');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('Large', 'Size Label', 'Large', 'L','label');
+INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('Extra Large', 'Size Label', 'Extra Large', 'XL','label');
 
 -- Color attribute items
 INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('Green', 'Color', 'Green', '#44FF03');
@@ -392,10 +394,10 @@ INSERT INTO attribute_items(id, attribute_id, displayValue, value) VALUES('No_ke
 -- Inserting data into `product_attributes`
 -- --------------------------------------------------------
 -- huarache-x-stussy-le
-INSERT INTO product_attributes(product_id, attribute_id) VALUES('huarache-x-stussy-le', 'Size');
+INSERT INTO product_attributes(product_id, attribute_id) VALUES('huarache-x-stussy-le', 'Size EU');
 
 -- jacket-canada-goosee
-INSERT INTO product_attributes(product_id, attribute_id) VALUES('jacket-canada-goosee', 'Size');
+INSERT INTO product_attributes(product_id, attribute_id) VALUES('jacket-canada-goosee', 'Size Label');
 
 -- ps-5
 INSERT INTO product_attributes(product_id, attribute_id) VALUES('ps-5', 'Color');
@@ -419,23 +421,23 @@ INSERT INTO product_attributes(product_id, attribute_id) VALUES('apple-iphone-12
 -- --------------------------------------------------------
 -- huarache-x-stussy-le size options
 INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
-VALUES('huarache-x-stussy-le', 'Size', '40');
+VALUES('huarache-x-stussy-le', 'Size EU', '40');
 INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
-VALUES('huarache-x-stussy-le', 'Size', '41');
+VALUES('huarache-x-stussy-le', 'Size EU', '41');
 INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
-VALUES('huarache-x-stussy-le', 'Size', '42');
+VALUES('huarache-x-stussy-le', 'Size EU', '42');
 INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
-VALUES('huarache-x-stussy-le', 'Size', '43');
+VALUES('huarache-x-stussy-le', 'Size EU', '43');
 
 -- jacket-canada-goosee size options
 INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
-VALUES('jacket-canada-goosee', 'Size', 'Small');
+VALUES('jacket-canada-goosee', 'Size Label', 'Small');
 INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
-VALUES('jacket-canada-goosee', 'Size', 'Medium');
+VALUES('jacket-canada-goosee', 'Size Label', 'Medium');
 INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
-VALUES('jacket-canada-goosee', 'Size', 'Large');
+VALUES('jacket-canada-goosee', 'Size Label', 'Large');
 INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 
-VALUES('jacket-canada-goosee', 'Size', 'Extra Large');
+VALUES('jacket-canada-goosee', 'Size Label', 'Extra Large');
 
 -- ps-5 color and capacity options
 INSERT INTO product_attribute_items(product_id, attribute_id, attribute_item_id) 

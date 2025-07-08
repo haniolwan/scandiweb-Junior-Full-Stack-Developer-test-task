@@ -2,14 +2,13 @@ import classNames from "classnames";
 import { Product } from "../../../helpers/types";
 import { CartIcon } from "../../../components/icons";
 import { Link } from "react-router";
-import { memo } from "react";
 import { useTotalCartItems } from "../../../context/cartItems/useTotalCartItems";
 
 type Props = {
   product: Product;
 };
 
-const Card = memo(({ product }: Props) => {
+const Card = ({ product }: Props) => {
   const usdPrice = product.prices.map(
     price => price.currency.label === "USD" && "$" + price.amount.toFixed(2)
   )[0];
@@ -115,6 +114,6 @@ const Card = memo(({ product }: Props) => {
       </Link>
     </div>
   );
-});
+};
 
 export default Card;
