@@ -106,7 +106,6 @@ const Item = ({ cartItem }: Props) => {
             {matchingProduct.prices[0].currency.symbol +
               matchingProduct.prices[0].amount}
           </p>
-          {/* disable options  */}
           <div className="pointer-events-none min-w-28">
             {matchingProduct.attributes.map(attr => {
               if (attr.id === "Size") {

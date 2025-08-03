@@ -81,9 +81,6 @@ const Info = ({ product }: Props) => {
     updateSelectedCartItems(updatedItems);
   };
 
-  const isOutOfStock =
-    new URLSearchParams(location.search).get("status") === "out-of-stock";
-
   const isDisabled = !Object.values(selectedAttributes).every(Boolean);
 
   const toKebabCase = (str: string) =>
@@ -213,7 +210,7 @@ const Info = ({ product }: Props) => {
               {product.prices[0].currency.symbol + product.prices[0].amount}
             </p>
           </div>
-          {!isOutOfStock && product.inStock && (
+          {product.inStock && (
             <button
               disabled={isDisabled}
               type="button"
@@ -233,12 +230,14 @@ const Info = ({ product }: Props) => {
       <div className="mt-10">
         <h3 className="sr-only">Description</h3>
         <div className="space-y-6">
-          <span
-            className="text-base text-gray-900"
+          <div
+            className="text-base text-gray-900 product-description"
             data-testid="product-description"
           >
-            {parse(product.description)}
-          </span>
+            <div className="[&_ul]:list-disc [&_ul]:pl-6 [&_li]:mb-2">
+              {parse(product.description)}
+            </div>
+          </div>
         </div>
       </div>
     </div>

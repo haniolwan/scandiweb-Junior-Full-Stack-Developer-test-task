@@ -38,9 +38,6 @@
 @layer base {
   body {
     font-family: "Raleway", sans-serif;
-    li {
-      list-style: auto;
-    }
   }
 }
 

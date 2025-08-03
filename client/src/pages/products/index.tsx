@@ -3,6 +3,8 @@ import { Product } from "../../helpers/types";
 import Card from "./card";
 import { useQuery, gql } from "@apollo/client";
 import { useProductFilters } from "../../context/productFilters/useProductFilters";
+import { useParams } from "react-router-dom";
+import PageNotFound from "../error/not-found";
 
 const PRODUCTS_QUERY = gql`
   query GetProducts {
@@ -54,6 +56,17 @@ const Products = () => {
         (product: Product) =>
           !filterProperty || product.category === filterProperty
       );
+
+  const { categoryName } = useParams();
+  const { categories } = useProductFilters();
+
+  const categoryExists = categories.some(
+    ct => ct.name === categoryName?.toLowerCase()
+  );
+
+  if (!categoryExists) {
+    return <PageNotFound />;
+  }
 
   return (
     !loading && (

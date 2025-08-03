@@ -1,13 +1,20 @@
 import { useEffect } from "react";
 import CartPopup from "./cart/popup";
 import { Logo } from "../icons";
-import { Outlet, useLocation } from "react-router";
+import { Outlet, useLocation, useNavigate } from "react-router";
 import Overlay from "./overlay";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { Navigation } from "./navigation";
 
 const Layout = () => {
+  const navigate = useNavigate();
   const { pathname } = useLocation();
+
+  useEffect(() => {
+    if (pathname === "/") {
+      navigate("/category/all", { replace: true });
+    }
+  }, [pathname, navigate]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -26,7 +33,7 @@ const Layout = () => {
           keyFields: ["id"],
         },
         AttributeItem: {
-          keyFields: ["id", "value", "displayValue"], // Force uniqueness
+          keyFields: ["id", "value", "displayValue"],
         },
       },
     }),

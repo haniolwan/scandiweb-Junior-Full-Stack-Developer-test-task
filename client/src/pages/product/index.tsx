@@ -1,5 +1,6 @@
 import Info from "../../components/product/info";
 import ThumbsGallery from "../../components/product/thumbs";
+import PageNotFound from "../error/not-found";
 import Layout from "../layout";
 import { gql, useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
@@ -41,6 +42,10 @@ const Product = () => {
   const { data, loading } = useQuery(PRODUCTS_QUERY, {
     variables: { id },
   });
+
+  if (data?.products.length === 0) {
+    return <PageNotFound />;
+  }
 
   return (
     data?.products &&
