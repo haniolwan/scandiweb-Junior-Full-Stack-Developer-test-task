@@ -43,7 +43,7 @@ const Product = () => {
     variables: { id },
   });
 
-  if (data?.products.length === 0) {
+  if (data?.products.length === 0 && !loading) {
     return <PageNotFound />;
   }
 

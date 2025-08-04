@@ -64,7 +64,7 @@ const Products = () => {
     ct => ct.name === categoryName?.toLowerCase()
   );
 
-  if (!categoryExists) {
+  if (!categoryExists && !loading) {
     return <PageNotFound />;
   }
 
