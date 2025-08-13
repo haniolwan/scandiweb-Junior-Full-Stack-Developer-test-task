@@ -11,7 +11,7 @@ const Layout = () => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    if (pathname === "/") {
+    if (pathname === "/" || pathname === "/category") {
       navigate("/category/all", { replace: true });
     }
   }, [pathname, navigate]);
