@@ -36,7 +36,6 @@ export const Navigation = () => {
       (cat: Category) =>
         cat.name.toLowerCase() === categoryFromUrl.toLowerCase()
     );
-
     if (!categoryExists) {
       updatedFilters("all");
       return;
