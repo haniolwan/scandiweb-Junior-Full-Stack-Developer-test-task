@@ -30,7 +30,10 @@ export const Navigation = () => {
     const isCategoryPath = pathname.startsWith("/category/");
     if (!isCategoryPath) return;
 
-    const categoryFromUrl = pathname.split("/category/")[1] || "all";
+    const categoryFromUrl = (pathname.split("/category/")[1] || "all").replace(
+      /\/$/,
+      ""
+    );
 
     const categoryExists = data.categories.some(
       (cat: Category) =>
